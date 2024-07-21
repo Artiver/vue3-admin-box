@@ -1,0 +1,37 @@
+{
+  "name": "vue-admin-box",
+  "version": "1.1.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build --mode=production",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "@antv/x6": "^2.18.1",
+    "@element-plus/icons-vue": "^2.3.1",
+    "@imengyu/vue3-context-menu": "^1.4.1",
+    "@vueuse/core": "^10.11.0",
+    "axios": "^1.7.2",
+    "element-plus": "^2.7.7",
+    "mockjs": "^1.1.0",
+    "monaco-editor": "^0.50.0",
+    "normalize.css": "^8.0.1",
+    "nprogress": "^0.2.0",
+    "vue": "^3.4.33",
+    "vue-router": "^4.4.0",
+    "vuex": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.5",
+    "@webxrd/vite-plugin-svg": "^1.0.11",
+    "eslint": "^9.7.0",
+    "eslint-plugin-vue": "^9.27.0",
+    "globals": "^15.8.0",
+    "sass": "^1.77.8",
+    "unplugin-auto-import": "^0.18.0",
+    "unplugin-vue-components": "^0.27.3",
+    "vite": "^5.3.4",
+    "vite-plugin-mock": "^3.0.2"
+  }
+}
