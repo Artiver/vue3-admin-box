@@ -1,10 +1,18 @@
 <template>
-  <div id="topology"></div>
+  <el-row>
+    <el-col :span="2">
+      <div class="app-container" id="stencil"></div>
+    </el-col>
+    <el-col :span="22">
+      <div class="app-container" id="topology"></div>
+    </el-col>
+  </el-row>
 </template>
 
 <script setup lang="js">
-import {h, onMounted, ref} from "vue"
+import {h, onMounted} from "vue"
 import {Graph} from "@antv/x6"
+import {Stencil} from '@antv/x6-plugin-stencil'
 
 import ContextMenu from '@imengyu/vue3-context-menu'
 
@@ -65,7 +73,7 @@ const data = {
   ],
 }
 
-let graph = ref(null)
+let graph = null
 
 function initialGraph() {
   graph = new Graph({
@@ -77,7 +85,36 @@ function initialGraph() {
   graph.fromJSON(data)
 }
 
-const handleNodeContextmenu = (e) => {
+function registerAddons() {
+  const stencil = new Stencil({
+    target: graph,
+    groups: [
+      {
+        name: 'group1',
+      },
+      {
+        name: 'group2',
+      },
+    ],
+  })
+  const rect1 = graph.createNode({
+    shape: 'rect',
+    width: 50,
+    height: 40,
+  })
+  const rect2 = rect1.clone()
+  const rect3 = graph.createNode({
+    shape: 'ellipse',
+    width: 50,
+    height: 40,
+  })
+  const rect4 = rect3.clone()
+  document.getElementById('stencil').appendChild(stencil.container)
+  stencil.load([rect1, rect2], 'group1')
+  stencil.load([rect3, rect4], 'group2')
+}
+
+function handleNodeContextmenu(e, cell) {
   ContextMenu.showContextMenu({
     x: e.pageX,
     y: e.pageY,
@@ -92,26 +129,7 @@ const handleNodeContextmenu = (e) => {
           }
         }),
         onClick: () => {
-          console.log(e)
-        },
-      },
-      {
-        label: h('div', {style: {color: '#003a85',}}, "复制"),
-        onClick: () => {
-          console.log(e)
-        },
-      },
-      {
-        label: h('div', {style: {color: '#003a85',}}, "剪切"),
-        divided: true,
-        onClick: () => {
-          console.log(e)
-        },
-      },
-      {
-        label: h('div', {style: {color: '#8f0000',}}, "删除"),
-        onClick: () => {
-          console.log(e)
+          console.log(cell)
         },
       },
     ],
@@ -120,20 +138,20 @@ const handleNodeContextmenu = (e) => {
 
 function registerEvents() {
   graph.on("node:contextmenu", ({e, x, y, cell, view}) => {
-    handleNodeContextmenu(e)
+    handleNodeContextmenu(e, cell)
   })
 }
 
 onMounted(() => {
   initialGraph()
   registerEvents()
+  registerAddons()
 })
 
 </script>
 
 <style scoped lang="scss">
-#topology {
-  width: 100%;
-  height: 90vh;
+.app-container {
+  height: 91vh;
 }
 </style>

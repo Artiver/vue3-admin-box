@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@antv/x6": "^2.18.1",
+    "@antv/x6-plugin-stencil": "^2.1.5",
     "@element-plus/icons-vue": "^2.3.1",
     "@imengyu/vue3-context-menu": "^1.4.1",
     "@vueuse/core": "^10.11.0",
@@ -29,7 +30,7 @@
     "eslint-plugin-vue": "^9.27.0",
     "globals": "^15.8.0",
     "sass": "^1.77.8",
-    "unplugin-auto-import": "^0.18.0",
+    "unplugin-auto-import": "^0.18.1",
     "unplugin-vue-components": "^0.27.3",
     "vite": "^5.3.4",
     "vite-plugin-mock": "^3.0.2"
