@@ -5,14 +5,12 @@
 </template>
 
 <script setup lang="js">
-import {useStore} from 'vuex'
 import {computed} from 'vue'
+import {useStore} from 'vuex'
 
 const store = useStore()
 const size = computed(() => store.state.app.elementSize)
-
 </script>
 
-<style scoped lang="scss">
-
+<style lang="scss">
 </style>
