@@ -102,7 +102,6 @@ onBeforeMount(() => {
 :deep(.el-main-box) {
   width: 100%;
   height: 100%;
-  overflow-y: auto;
   box-sizing: border-box;
 }
 
