@@ -16,29 +16,16 @@ const route = [
     ]
   },
   {
-    path: '/common',
-    component: Layout,
-    redirect: '/dashboard',
-    meta: {title: '常用', icon: 'Tickets', cache: "true"},
-    children: [
-      {
-        path: 'table',
-        component: createNameComponent(() => import('@/views/main/table/tableMenu.vue')),
-        meta: {title: '表格', icon: 'Tickets', hideClose: false}
-      },
-      {
-        path: 'chart',
-        component: createNameComponent(() => import('@/views/main/table/tableMenu.vue')),
-        meta: {title: '图表', icon: 'Tickets', hideClose: false}
-      }
-    ]
-  },
-  {
     path: '/editor',
     component: Layout,
     redirect: '/dashboard',
     meta: {title: '编辑器', icon: 'Edit', cache: "true"},
     children: [
+      {
+        path: 'markdown',
+        component: createNameComponent(() => import('@/views/main/editor/markdown/MarkdownEditor.vue')),
+        meta: {title: 'Markdown', icon: 'Notebook', hideClose: false}
+      },
       {
         path: 'monaco',
         component: createNameComponent(() => import('@/views/main/editor/code/MonacoEditorIndex.vue')),
