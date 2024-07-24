@@ -8,7 +8,7 @@ const vditor = ref()
 
 onMounted(() => {
   vditor.value = new Vditor('markdown-editor',{
-
+    cdn: '/static/markdown'
   })
 })
 </script>
