@@ -8,9 +8,9 @@ export function createNameComponent(component) {
   return () => {
     return new Promise((resolve) => {
       component().then((comm) => {
-        const name = (comm.default.name || 'vueAdminBox') + '$' + Date.now();
+        const name = (comm.default.name || 'vueAdminBox') + '_' + Date.now();
         const tempComm = defineComponent({
-          name,
+          name: name,
           setup() {
             const isReload = ref(false);
             let timeOut = null;

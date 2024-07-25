@@ -89,6 +89,14 @@ router.afterEach(() => {
   initMenu(route)
 })
 
+function getComponentName(menu) {
+  if (menu.matched) {
+    return menu.matched.slice(-1)[0].components.default.name
+  } else {
+    return ""
+  }
+}
+
 // 全屏
 function onFullscreen() {
   store.commit('app/contentFullScreenChange', !contentFullScreen.value)
@@ -127,7 +135,8 @@ function closeAllRoute() {
 
 // 添加新的菜单项
 function addMenu(menu) {
-  let {path, meta, name, query} = menu
+  let {path, meta, query} = menu
+  let name = getComponentName(menu)
   if (meta.hideTabs) {
     return
   }
