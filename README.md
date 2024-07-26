@@ -7,6 +7,8 @@ Vue 3.4 + Vite 5.3 + Vuex 4.1 + ElementPlus + JavaScript
 
 学习Vue3，精简了原项目的一些配置，更新了依赖，修正了一些错误。
 
+添加常用的组件，如markdown编辑器vditor、图编辑器antv x6、代码编辑器monaco-editor等。
+
 # 安装
 
 ```shell
