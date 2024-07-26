@@ -11,6 +11,7 @@ export function createNameComponent(component) {
         const name = (comm.default.name || 'vueAdminBox') + '_' + Date.now();
         const tempComm = defineComponent({
           name: name,
+          props: comm.default.props || {},
           setup() {
             const isReload = ref(false);
             let timeOut = null;
@@ -34,7 +35,7 @@ export function createNameComponent(component) {
             if (this.isReload) {
               return h('div', {class: 'el-main-box'}, [h(reload)]);
             } else {
-              return h('div', {class: 'el-main-box'}, [createVNode(comm.default)]);
+              return h('div', {class: 'el-main-box'}, [createVNode(comm.default, this.$props)]);
             }
           }
         });
