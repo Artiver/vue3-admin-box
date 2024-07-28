@@ -1,4 +1,5 @@
 <script setup lang="js">
+import "animate.css"
 import { ref, onMounted } from 'vue'
 
 import Vditor from 'vditor'
@@ -16,7 +17,7 @@ onMounted(() => {
 
 <template>
   <div class="app-container">
-    <div id="markdown-title">Title</div>
+    <h1 id="markdown-title" class="animate__animated animate__flash">Title</h1>
     <div id="markdown-editor"></div>
   </div>
 </template>
@@ -24,6 +25,8 @@ onMounted(() => {
 <style scoped lang="scss">
 #markdown-title {
   height: 50px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
