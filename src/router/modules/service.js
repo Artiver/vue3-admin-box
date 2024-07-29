@@ -11,7 +11,7 @@ const route = [
       {
         path: 'dashboard',
         component: createNameComponent(() => import('@/views/main/dashboard/dashboardMenu.vue')),
-        meta: {title: '仪表盘', icon: 'House', hideClose: true}
+        meta: {title: '仪表盘', icon: 'House', cache: false, hideClose: true}
       }
     ]
   },
@@ -19,22 +19,22 @@ const route = [
     path: '/editor',
     component: Layout,
     redirect: '/dashboard',
-    meta: {title: '编辑器', icon: 'Edit', cache: "true"},
+    meta: {title: '编辑器', icon: 'Edit'},
     children: [
       {
         path: 'markdown',
         component: createNameComponent(() => import('@/views/main/editor/markdown/MarkdownEditor.vue')),
-        meta: {title: 'Markdown', icon: 'Notebook', hideClose: false}
+        meta: {title: 'Markdown', icon: 'Notebook', cache: true, hideClose: false}
       },
       {
         path: 'monaco',
         component: createNameComponent(() => import('@/views/main/editor/code/MonacoEditorIndex.vue')),
-        meta: {title: 'VSCode', icon: 'Notebook', hideClose: false}
+        meta: {title: 'VSCode', icon: 'Notebook', cache: true, hideClose: false}
       },
       {
         path: 'x6',
         component: createNameComponent(() => import('@/views/main/editor/topology/X6EditorIndex.vue')),
-        meta: {title: '拓扑图', icon: 'EditPen', hideClose: false}
+        meta: {title: '拓扑图', icon: 'EditPen', cache: true, hideClose: false}
       },
     ]
   }

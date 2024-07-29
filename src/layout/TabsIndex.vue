@@ -1,15 +1,7 @@
 <template>
   <el-container style="height: 100vh">
-    <div
-        class="mask"
-        v-show="!isCollapse && !contentFullScreen"
-        @click="hideMenu"
-    ></div>
-    <el-aside
-        :width="isCollapse ? '60px' : '250px'"
-        :class="isCollapse ? 'hide-aside' : 'show-side'"
-        v-show="!contentFullScreen"
-    >
+    <div class="mask" v-show="!isCollapse && !contentFullScreen" @click="hideMenu"></div>
+    <el-aside :width="isCollapse ? '60px' : '250px'" :class="isCollapse ? 'hide-aside' : 'show-side'" v-show="!contentFullScreen">
       <LogoIndex v-if="showLogo"/>
       <MenuIndex/>
     </el-aside>
@@ -20,14 +12,8 @@
       <TabsBar v-show="showTabs"/>
       <el-main>
         <router-view v-slot="{ Component, route }">
-          <transition
-              :name="route.meta.transition || 'fade-transform'"
-              mode="out-in"
-          >
-            <keep-alive
-                v-if="keepAliveComponentsName"
-                :include="keepAliveComponentsName"
-            >
+          <transition :name="route.meta.transition || 'fade-transform'" mode="out-in">
+            <keep-alive  v-if="keepAliveComponentsName" :include="keepAliveComponentsName">
               <component :is="Component" :key="route.fullPath"/>
             </keep-alive>
             <component v-else :is="Component" :key="route.fullPath"/>

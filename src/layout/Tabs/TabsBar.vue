@@ -28,7 +28,7 @@
         </div>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item class="tab-dropdown-item" :icon="RefreshLeft" @click="pageReload">重新加载
+            <el-dropdown-item class="tab-dropdown-item" :icon="Refresh" @click="pageReload">重新加载
             </el-dropdown-item>
             <el-dropdown-item class="tab-dropdown-item" :icon="CircleClose" :disabled="currentDisabled"
                               @click="closeCurrentRoute">关闭当前标签
@@ -56,7 +56,7 @@ import {computed, nextTick, reactive, ref, watch} from 'vue'
 import {useStore} from 'vuex'
 import {useRoute, useRouter} from 'vue-router'
 
-import {ArrowDown, CircleClose, FullScreen, RefreshLeft} from '@element-plus/icons-vue'
+import {ArrowDown, CircleClose, FullScreen, Refresh} from '@element-plus/icons-vue'
 
 import Item from './item.vue'
 import tabsHook from './tabsHook'
@@ -78,12 +78,11 @@ let menuList = ref(tabsHook.getItem())
 if (menuList.value.length === 0) { // 判断之前有没有调用过
   addMenu(defaultMenu)
 }
+
 watch(menuList.value, (newVal) => {
   tabsHook.setItem(newVal)
 })
-watch(menuList, (newVal) => {
-  tabsHook.setItem(newVal)
-})
+
 router.afterEach(() => {
   addMenu(route)
   initMenu(route)

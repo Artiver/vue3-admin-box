@@ -43,6 +43,10 @@ onMounted(() => {
 onBeforeUnmount(() => {
   editor.dispose()
 })
+
+onActivated(() => {
+  editor.focus()
+})
 </script>
 
 <style scoped lang="scss">
