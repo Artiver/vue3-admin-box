@@ -89,11 +89,7 @@ router.afterEach(() => {
 })
 
 function getComponentName(menu) {
-  if (menu.matched) {
-    return menu.matched.slice(-1)[0].components.default.name
-  } else {
-    return ""
-  }
+  return menu.matched?.slice(-1)[0].components.default.name
 }
 
 // 全屏
@@ -155,13 +151,7 @@ function addMenu(menu) {
 // 删除菜单项
 function delMenu(menu, nextPath) {
   let index = 0
-  if (!menu.meta.hideClose) {
-    if (menu.meta.cache && menu.name) {
-      store.commit('keepAlive/delKeepAliveComponentsName', menu.name)
-    }
-    index = menuList.value.findIndex((item) => item.path === menu.path)
-    menuList.value.splice(index, 1)
-  }
+  index = menuList.value.findIndex((item) => item.path === menu.path)
   if (nextPath) {
     router.push(nextPath)
     return
@@ -171,6 +161,14 @@ function delMenu(menu, nextPath) {
     const prePage = index - 1 > 0 ? menuList.value[index - 1] : {path: defaultMenu.path}
     router.push({path: prePage.path, query: prePage.query || {}})
   }
+  setTimeout(() => {
+    if (!menu.meta.hideClose) {
+      if (menu.meta.cache && menu.name) {
+        store.commit('keepAlive/delKeepAliveComponentsName', menu.name)
+      }
+      menuList.value.splice(index, 1)
+    }
+  }, 300);
 }
 
 // 初始化activeMenu
