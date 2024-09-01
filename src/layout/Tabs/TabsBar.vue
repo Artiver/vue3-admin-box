@@ -16,10 +16,6 @@
       />
     </el-scrollbar>
     <div class="handle">
-      <div id="vueAdminBoxTabRefresh" @click="pageReload"></div>
-      <div id="vueAdminBoxTabCloseSelf" @click="closeCurrentRoute"></div>
-      <div id="vueAdminBoxTabCloseOther" @click="closeOtherRoute"></div>
-      <div id="vueAdminBoxTabCloseAll" @click="closeAllRoute"></div>
       <el-dropdown placement="bottom">
         <div class="el-dropdown-link">
           <el-icon>
@@ -72,6 +68,7 @@ const defaultMenu = {
 }
 const contentFullScreen = computed(() => store.state.app.contentFullScreen)
 const currentDisabled = computed(() => route.path === defaultMenu.path)
+const closeTimeAfter = 300
 
 let activeMenu = reactive({path: ''})
 let menuList = ref(tabsHook.getItem())
@@ -112,20 +109,37 @@ function closeCurrentRoute() {
   }
 }
 
+function closeListRoute(tag) {
+  if (tag.meta.cache && tag.name) {
+    store.commit('keepAlive/delKeepAliveComponentsName', tag.name)
+  }
+  const index = menuList.value.findIndex((item) => item.path === tag.path)
+  menuList.value.splice(index, 1)
+}
+
 // 关闭除了当前标签之外的所有标签
 function closeOtherRoute() {
-  menuList.value = [defaultMenu]
-  if (route.path !== defaultMenu.path) {
-    addMenu(route)
+  const items = menuList.value
+  for (let tag of items) {
+    setTimeout(() => {
+      if (!tag.meta.hideClose && tag.path !== activeMenu.path) {
+        closeListRoute(tag)
+      }
+    }, closeTimeAfter);
   }
-  setKeepAliveData()
 }
 
 // 关闭所有的标签，除了首页
 function closeAllRoute() {
-  menuList.value = [defaultMenu]
-  setKeepAliveData()
   router.push(defaultMenu.path)
+  const items = menuList.value
+  for (let tag of items) {
+    setTimeout(() => {
+      if (!tag.meta.hideClose) {
+        closeListRoute(tag)
+      }
+    }, closeTimeAfter);
+  }
 }
 
 // 添加新的菜单项
@@ -168,7 +182,7 @@ function delMenu(menu, nextPath) {
       }
       menuList.value.splice(index, 1)
     }
-  }, 300);
+  }, closeTimeAfter);
 }
 
 // 初始化activeMenu
