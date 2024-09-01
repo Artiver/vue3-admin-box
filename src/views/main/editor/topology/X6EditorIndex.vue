@@ -16,62 +16,7 @@ import {Stencil} from '@antv/x6-plugin-stencil'
 
 import ContextMenu from '@imengyu/vue3-context-menu'
 
-const data = {
-  nodes: [
-    {
-      id: 'node1',
-      shape: 'rect',
-      x: 140,
-      y: 240,
-      width: 100,
-      height: 40,
-      label: 'hello',
-      attrs: {
-        // body 是选择器名称，选中的是 rect 元素
-        body: {
-          stroke: '#8f8f8f',
-          strokeWidth: 1,
-          fill: '#fff',
-          rx: 6,
-          ry: 6,
-        },
-      },
-    },
-    {
-      id: 'node2',
-      shape: 'rect',
-      x: 360,
-      y: 480,
-      width: 100,
-      height: 40,
-      label: 'world',
-      attrs: {
-        body: {
-          stroke: '#8f8f8f',
-          strokeWidth: 1,
-          fill: '#fff',
-          rx: 6,
-          ry: 6,
-        },
-      },
-    },
-  ],
-  edges: [
-    {
-      shape: 'edge',
-      source: 'node1',
-      target: 'node2',
-      label: 'x6',
-      attrs: {
-        // line 是选择器名称，选中的边的 path 元素
-        line: {
-          stroke: '#8f8f8f',
-          strokeWidth: 1,
-        },
-      },
-    },
-  ],
-}
+import x6Data from "./X6EditorData.js"
 
 let graph = null
 
@@ -82,7 +27,7 @@ function initialGraph() {
       color: '#F2F7FA',
     },
   })
-  graph.fromJSON(data)
+  graph.fromJSON(x6Data.drawData)
 }
 
 function registerAddons() {
@@ -147,11 +92,7 @@ onMounted(() => {
   registerEvents()
   registerAddons()
 })
-
 </script>
 
 <style scoped lang="scss">
-.app-container {
-  height: 91vh;
-}
 </style>
