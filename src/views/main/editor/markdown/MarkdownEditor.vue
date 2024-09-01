@@ -1,3 +1,10 @@
+<template>
+  <div class="app-container">
+    <h1 id="markdown-title" class="animate__animated animate__flash">Title</h1>
+    <div id="markdown-editor"></div>
+  </div>
+</template>
+
 <script setup lang="js">
 import "animate.css"
 import { ref, onMounted } from 'vue'
@@ -14,13 +21,6 @@ onMounted(() => {
   })
 })
 </script>
-
-<template>
-  <div class="app-container">
-    <h1 id="markdown-title" class="animate__animated animate__flash">Title</h1>
-    <div id="markdown-editor"></div>
-  </div>
-</template>
 
 <style scoped lang="scss">
 #markdown-title {

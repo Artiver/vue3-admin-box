@@ -1,5 +1,5 @@
 <template>
-  <div class="wscn-http404-container layout-container flex center">
+  <div class="layout-container flex center">
     <div class="wscn-http404">
       <div class="pic-404">
         <img class="pic-404__parent" :src="first" alt="404"/>

@@ -57,9 +57,9 @@
 import {reactive, ref} from 'vue'
 import {useStore} from 'vuex'
 import {ElMessage} from 'element-plus'
-import loginLeftPng from '@/assets/login/left.jpg';
+import loginLeftPng from '@/assets/login/left.jpg'
 import {systemSubTitle, systemTitle, WelcomeDescription} from '@/config'
-import {Key, User, View as ViewEye} from "@element-plus/icons-vue";
+import {Key, User, View as ViewEye} from "@element-plus/icons-vue"
 
 const store = useStore()
 const form = reactive({
@@ -127,7 +127,6 @@ function submit() {
   background: #fff url('@/assets/login/bg.png') no-repeat center;
   overflow: hidden;
   background-size: cover;
-  cursor: pointer;
   user-select: none;
 
   .box {

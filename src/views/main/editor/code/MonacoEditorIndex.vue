@@ -8,7 +8,7 @@ import {onBeforeUnmount, onMounted, ref} from 'vue'
 import * as monaco from 'monaco-editor'
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
-import {ElNotification} from "element-plus";
+import {ElNotification} from "element-plus"
 
 const text = ref('const a = 1;')
 

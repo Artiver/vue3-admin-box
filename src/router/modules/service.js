@@ -34,7 +34,7 @@ const route = [
       {
         path: 'x6',
         component: createNameComponent(() => import('@/views/main/editor/topology/X6EditorIndex.vue')),
-        meta: {title: '拓扑图', icon: 'EditPen', cache: true, hideClose: false}
+        meta: {title: 'X6Editor', icon: 'Notebook', cache: true, hideClose: false}
       },
     ]
   }
