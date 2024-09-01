@@ -14,7 +14,7 @@ const size = computed(() => store.state.app.elementSize)
 
 <style lang="scss">
 .app-container {
-  width: 100vw;
-  height: 90vh;
+  width: 100%;
+  height: 100%;
 }
 </style>

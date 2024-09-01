@@ -24,7 +24,6 @@ onMounted(() => {
 
 <style scoped lang="scss">
 #markdown-title {
-  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;

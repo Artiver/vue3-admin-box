@@ -1,6 +1,8 @@
 <template>
-  <el-button icon="Document" type="primary" plain @click="showContent">内容</el-button>
-  <div id="codeEditBox"></div>
+  <div class="app-container">
+    <el-button icon="Document" type="primary" plain @click="showContent">内容</el-button>
+    <div id="codeEditBox"></div>
+  </div>
 </template>
 
 <script setup lang="js">
@@ -51,7 +53,6 @@ onActivated(() => {
 
 <style scoped lang="scss">
 #codeEditBox {
-  width: 100%;
-  height: 95%;
+  height: 90vh;
 }
 </style>

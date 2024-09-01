@@ -1,12 +1,14 @@
 <template>
-  <el-row>
-    <el-col :span="2">
-      <div class="app-container" id="stencil"></div>
-    </el-col>
-    <el-col :span="22">
-      <div class="app-container" id="topology"></div>
-    </el-col>
-  </el-row>
+  <div class="app-container">
+    <el-row>
+      <el-col :span="2">
+        <div class="app" id="stencil"></div>
+      </el-col>
+      <el-col :span="22">
+        <div class="app" id="topology"></div>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script setup lang="js">
@@ -15,7 +17,6 @@ import {Graph} from "@antv/x6"
 import {Stencil} from '@antv/x6-plugin-stencil'
 
 import ContextMenu from '@imengyu/vue3-context-menu'
-
 import x6Data from "./X6EditorData.js"
 
 let graph = null
@@ -95,4 +96,7 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+.app {
+  height: 92vh;
+}
 </style>
