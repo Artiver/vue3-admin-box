@@ -1,15 +1,12 @@
 <template>
-  <el-config-provider :size="size">
+  <el-config-provider :size="appStore.elementSize">
     <router-view></router-view>
   </el-config-provider>
 </template>
 
 <script setup lang="js">
-import {computed} from 'vue'
-import {useStore} from 'vuex'
-
-const store = useStore()
-const size = computed(() => store.state.app.elementSize)
+import {useAppStore} from "@/stores/app.js"
+const appStore = useAppStore()
 </script>
 
 <style lang="scss">

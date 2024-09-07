@@ -4,38 +4,28 @@
   </component>
 </template>
 
-<script lang="js">
-import {computed, defineComponent} from 'vue'
-import {useStore} from "vuex";
+<script setup lang="js">
+import {ref} from 'vue'
+import {useAppStore} from "@/stores/app.js"
 
-export default defineComponent({
-  name: 'appLink',
-  props: {
-    to: {
-      type: String,
-      required: true
-    }
-  },
-  setup(props) {
-    const store = useStore();
-    const isCollapse = computed(() => store.state.app.isCollapse);
-    const linkProps = (to) => {
-      return {
-        to: to
-      }
-    }
-    const hideMenu = () => {
-      if (document.body.clientWidth <= 1000 && !isCollapse.value) {
-        store.commit("app/isCollapseChange", true);
-      }
-    };
-    return {
-      type: "router-link",
-      linkProps,
-      hideMenu
-    }
+const type = ref("router-link")
+const props = defineProps({
+  to: {
+    type: String,
+    required: true
   }
-})
+});
+const appStore = useAppStore();
+const linkProps = (to) => {
+  return {
+    to: to
+  }
+};
+const hideMenu = () => {
+  if (document.body.clientWidth <= 1000 && !appStore.isCollapse) {
+    appStore.isCollapseChange(true)
+  }
+};
 </script>
 <style scoped lang="scss">
 

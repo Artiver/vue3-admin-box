@@ -55,18 +55,18 @@
 
 <script setup lang="js">
 import {reactive, ref, watch} from 'vue'
-import {useStore} from 'vuex'
 import themeIcon from './theme/theme-icon.vue'
 import themeColor from './theme/theme-color.vue'
 import {style} from '@/theme/index'
 import {Setting} from "@element-plus/icons-vue";
+import {useAppStore} from "@/stores/app.js";
 
-const store = useStore()
+const appStore = useAppStore();
 const state = reactive({
-  style: store.state.app.theme.state.style,
-  primaryColor: store.state.app.theme.state.primaryColor,
-  primaryTextColor: store.state.app.theme.state.primaryTextColor,
-  menuType: store.state.app.theme.state.menuType
+  style: appStore.theme.state.style,
+  primaryColor: appStore.theme.state.primaryColor,
+  primaryTextColor: appStore.theme.state.primaryTextColor,
+  menuType: appStore.theme.state.menuType
 })
 const themeColorArr = [
   {color: '#409eff', textColor: '#fff', tip: '默认蓝'},
@@ -80,10 +80,7 @@ const themeColorArr = [
 function setTheme() {
   const userTheme = style[state.style]
   const body = document.getElementsByTagName('body')[0]
-  // 设置全局顶部body上的class名称，即为主题名称，便于自定义配置符合当前主题的样式统一入口
   body.setAttribute('data-theme', state.style)
-  // 需要设置的颜色参照theme.scss，位置：assets/style/theme.scss
-  // 设置主题色
   body.style.setProperty('--system-primary-color', state.primaryColor)
   for (let i in userTheme) {
     if (i === 'name') {
@@ -95,26 +92,19 @@ function setTheme() {
       body.style.setProperty(cssVarName, item[y])
     }
   }
+  appStore.setTheme({ state: { ...state } })
 }
 
-// 监听数据的变化
 watch(state, () => {
-  const theme = {
-    state: {
-      ...state
-    }
-  }
-  store.commit('app/stateChange', {
-    name: 'theme',
-    value: theme
-  })
   setTheme()
 })
+
 let drawer = ref(false)
 const options = reactive([
-  {name: '显示logo', value: store.state.app.showLogo, store: 'showLogo'},
-  {name: '显示面包屑导航', value: store.state.app.showTabs, store: 'showTabs'},
-  {name: '保持一个菜单展开', value: store.state.app.expandOneMenu, store: 'expandOneMenu'}
+  {name: '显示logo', value: appStore.other.showLogo, store: 'showLogo'},
+  {name: '显示面包屑导航', value: appStore.other.showBreadCrumb, store: 'showBreadCrumb'},
+  {name: '显示标签页导航', value: appStore.other.showTabs, store: 'showTabs'},
+  {name: '保持一个菜单展开', value: appStore.other.expandOneMenu, store: 'expandOneMenu'}
 ])
 
 function drawerChange(value) {
@@ -122,7 +112,7 @@ function drawerChange(value) {
 }
 
 function change(option) {
-  store.commit(`app/stateChange`, {name: option.store, value: option.value})
+  appStore.setState({store: option.store, value: option.value})
 }
 
 setTheme()

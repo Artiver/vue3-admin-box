@@ -6,8 +6,8 @@
         text-color="var(--system-menu-text-color)"
         active-text-color="var(--system-primary-color)"
         :default-active="activeMenu"
-        :class="isCollapse? 'collapse': ''"
-        :collapse="isCollapse"
+        :class="appStore.isCollapse? 'collapse' : ''"
+        :collapse="appStore.isCollapse"
         :collapse-transition="false"
         :unique-opened="expandOneMenu"
     >
@@ -17,14 +17,13 @@
 </template>
 
 <script setup lang="js">
-import {computed} from 'vue'
-import {useRoute, useRouter} from 'vue-router'
-import {useStore} from 'vuex'
-import MenuItem from './MenuItem.vue'
+import {computed} from "vue";
+import {useRoute, useRouter} from "vue-router";
+import MenuItem from "./MenuItem.vue";
+import {useAppStore} from "@/stores/app.js";
 
-const store = useStore()
-const isCollapse = computed(() => store.state.app.isCollapse)
-const expandOneMenu = computed(() => store.state.app.expandOneMenu)
+const appStore = useAppStore()
+const expandOneMenu = computed(() => appStore.other.expandOneMenu)
 const allRoutes = useRouter().options.routes
 const route = useRoute()
 const activeMenu = computed(() => {
@@ -46,7 +45,7 @@ const activeMenu = computed(() => {
   border: none;
 
   &.collapse {
-    margin-left: 0px;
+    margin-left: 0;
   }
 
   :deep() {

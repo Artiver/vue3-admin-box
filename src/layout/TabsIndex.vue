@@ -1,19 +1,19 @@
 <template>
   <el-container style="height: 100vh">
-    <div class="mask" v-show="!isCollapse && !contentFullScreen" @click="hideMenu"></div>
-    <el-aside :width="isCollapse ? '60px' : '250px'" :class="isCollapse ? 'hide-aside' : 'show-side'" v-show="!contentFullScreen">
-      <LogoIndex v-if="showLogo"/>
+    <div class="mask" v-show="!appStore.isCollapse" @click="hideMenu"></div>
+    <el-aside :width="appStore.isCollapse ? '60px' : '250px'" :class="appStore.isCollapse ? 'hide-aside' : 'show-side'">
+      <LogoIndex v-if="appStore.other.showLogo"/>
       <MenuIndex/>
     </el-aside>
     <el-container>
-      <el-header v-show="!contentFullScreen">
+      <el-header>
         <HeaderIndex/>
       </el-header>
-      <TabsBar v-show="showTabs"/>
+      <TabsBar v-show="appStore.other.showTabs"/>
       <el-main>
         <router-view v-slot="{ Component, route }">
           <transition :name="route.meta.transition || 'fade-transform'" mode="out-in">
-            <keep-alive  v-if="keepAliveComponentsName" :include="keepAliveComponentsName">
+            <keep-alive  v-if="keepAliveStore.keepAliveComponentsName" :include="keepAliveStore.keepAliveComponentsName">
               <component :is="Component" :key="route.fullPath"/>
             </keep-alive>
             <component v-else :is="Component" :key="route.fullPath"/>
@@ -25,31 +25,27 @@
 </template>
 
 <script setup lang="js">
-import {computed, onBeforeMount} from "vue"
-import {useStore} from "vuex"
-import {useEventListener} from "@vueuse/core"
-import MenuIndex from "./Menu/MenuIndex.vue"
-import LogoIndex from "./Logo/LogoIndex.vue"
-import HeaderIndex from "./Header/HeaderIndex.vue"
-import TabsBar from "./Tabs/TabsBar.vue"
+import {onBeforeMount} from "vue";
+import {useEventListener} from "@vueuse/core";
+import MenuIndex from "./Menu/MenuIndex.vue";
+import LogoIndex from "./Logo/LogoIndex.vue";
+import HeaderIndex from "./Header/HeaderIndex.vue";
+import TabsBar from "./Tabs/TabsBar.vue";
+import {useAppStore} from "@/stores/app.js";
+import {useKeepAliveStore} from "@/stores/keepAlive.js";
 
-const store = useStore()
-
-const isCollapse = computed(() => store.state.app.isCollapse)
-const contentFullScreen = computed(() => store.state.app.contentFullScreen)
-const showLogo = computed(() => store.state.app.showLogo)
-const showTabs = computed(() => store.state.app.showTabs)
-const keepAliveComponentsName = computed(() => store.getters['keepAlive/keepAliveComponentsName'])
+const appStore = useAppStore()
+const keepAliveStore = useKeepAliveStore()
 
 function hideMenu() {
-  store.commit("app/isCollapseChange", true)
+  appStore.isCollapseChange(true)
 }
 
 function resizeHandler() {
-  if (document.body.clientWidth <= 1000 && !isCollapse.value) {
-    store.commit("app/isCollapseChange", true)
-  } else if (document.body.clientWidth > 1000 && isCollapse.value) {
-    store.commit("app/isCollapseChange", false)
+  if (document.body.clientWidth <= 1000 && !appStore.isCollapse) {
+    appStore.isCollapseChange(true)
+  } else if (document.body.clientWidth > 1000 && appStore.isCollapse) {
+    appStore.isCollapseChange(false)
   }
 }
 

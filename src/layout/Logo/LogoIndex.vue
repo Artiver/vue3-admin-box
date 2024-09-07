@@ -2,18 +2,16 @@
   <div class="logo-container">
     <el-space :size="10">
       <img src="@/assets/logo.png" alt="">
-      <h1 v-if="!isCollapse">{{ systemTitle }}</h1>
+      <h1 v-if="!appStore.isCollapse">{{ systemTitle }}</h1>
     </el-space>
   </div>
 </template>
 
 <script setup lang="js">
-import {computed} from 'vue'
-import {useStore} from 'vuex'
 import {systemTitle} from '@/config'
+import {useAppStore} from "@/stores/app.js"
 
-const store = useStore()
-const isCollapse = computed(() => store.state.app.isCollapse)
+const appStore = useAppStore()
 </script>
 
 <style scoped lang="scss">

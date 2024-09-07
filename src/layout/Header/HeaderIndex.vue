@@ -2,15 +2,15 @@
   <header>
     <div class="left-box">
       <!-- 收缩按钮 -->
-      <div class="menu-icon" @click="openedStateChange">
-        <el-icon v-if="isCollapse">
+      <div class="menu-icon" @click="appStore.isCollapseChange(!appStore.isCollapse)">
+        <el-icon v-if="appStore.isCollapse">
           <Expand/>
         </el-icon>
         <el-icon v-else>
           <Fold/>
         </el-icon>
       </div>
-      <Breadcrumb/>
+      <Breadcrumb v-if="appStore.other.showBreadCrumb"/>
     </div>
     <div class="right-box">
       <!-- 快捷功能按钮 -->
@@ -28,7 +28,7 @@
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item @click="loginOut">
+              <el-dropdown-item @click="userStore.logOut()">
                 <el-space size="small">
                   <el-icon>
                     <CircleCloseFilled/>
@@ -45,22 +45,14 @@
 </template>
 
 <script setup lang="js">
-import {computed} from 'vue'
-import {useStore} from 'vuex'
 import Breadcrumb from './Breadcrumb.vue'
 import Theme from './functionList/themeIndex.vue'
-import {ArrowDown, CircleCloseFilled, Expand, Fold} from "@element-plus/icons-vue";
+import {ArrowDown, CircleCloseFilled, Expand, Fold} from "@element-plus/icons-vue"
+import {useAppStore} from "@/stores/app.js"
+import {useUserStore} from "@/stores/user.js"
 
-const store = useStore()
-const isCollapse = computed(() => store.state.app.isCollapse)
-
-function openedStateChange() {
-  store.commit('app/isCollapseChange', !isCollapse.value)
-}
-
-function loginOut() {
-  store.dispatch('user/loginOut')
-}
+const userStore = useUserStore()
+const appStore = useAppStore()
 </script>
 
 <style scoped lang="scss">

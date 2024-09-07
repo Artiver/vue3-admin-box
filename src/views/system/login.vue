@@ -54,14 +54,16 @@
 </template>
 
 <script setup lang="js">
-import {reactive, ref} from 'vue'
-import {useStore} from 'vuex'
-import {ElMessage} from 'element-plus'
-import loginLeftPng from '@/assets/login/left.jpg'
-import {systemSubTitle, systemTitle, WelcomeDescription} from '@/config'
-import {Key, User, View as ViewEye} from "@element-plus/icons-vue"
+import {reactive, ref} from "vue";
+import {useRouter} from "vue-router";
+import {ElMessage} from "element-plus";
+import loginLeftPng from "@/assets/login/left.jpg";
+import {systemSubTitle, systemTitle, WelcomeDescription} from "@/config";
+import {Key, User, View as ViewEye} from "@element-plus/icons-vue";
+import {useUserStore} from "@/stores/user.js";
 
-const store = useStore()
+const router = useRouter()
+const userStore = useUserStore()
 const form = reactive({
   username: '',
   password: '',
@@ -104,7 +106,7 @@ function submit() {
       username: form.username,
       password: form.password
     }
-    store.dispatch('user/login', params).then(() => {
+    userStore.logIn(params).then(() => {
       ElMessage({
         message: 'Login successfully',
         type: 'success',

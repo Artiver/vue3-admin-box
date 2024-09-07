@@ -38,41 +38,34 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <el-tooltip class="item" effect="dark" :content="contentFullScreen ? '退出全屏': '全屏'" placement="bottom">
-        <el-icon @click="onFullscreen">
-          <FullScreen/>
-        </el-icon>
-      </el-tooltip>
     </div>
   </div>
 </template>
 
 <script setup lang="js">
 import {computed, nextTick, reactive, ref, watch} from 'vue'
-import {useStore} from 'vuex'
 import {useRoute, useRouter} from 'vue-router'
-
-import {ArrowDown, CircleClose, FullScreen, Refresh} from '@element-plus/icons-vue'
-
+import {ArrowDown, CircleClose, Refresh} from '@element-plus/icons-vue'
 import Item from './item.vue'
 import tabsHook from './tabsHook'
+import {useKeepAliveStore} from "@/stores/keepAlive.js";
 
-const store = useStore()
+const keepAliveStore = useKeepAliveStore()
 const route = useRoute()
 const router = useRouter()
+
 const scrollbarDom = ref(null)
 const scrollLeft = ref(0)
 const defaultMenu = {
   path: '/dashboard',
   meta: {title: '首页', hideClose: true}
 }
-const contentFullScreen = computed(() => store.state.app.contentFullScreen)
 const currentDisabled = computed(() => route.path === defaultMenu.path)
-const closeTimeAfter = 300
+const closeTimeAfter = 256
 
 let activeMenu = reactive({path: ''})
 let menuList = ref(tabsHook.getItem())
-if (menuList.value.length === 0) { // 判断之前有没有调用过
+if (menuList.value.length === 0) {
   addMenu(defaultMenu)
 }
 
@@ -87,11 +80,6 @@ router.afterEach(() => {
 
 function getComponentName(menu) {
   return menu.matched?.slice(-1)[0].components.default.name
-}
-
-// 全屏
-function onFullscreen() {
-  store.commit('app/contentFullScreenChange', !contentFullScreen.value)
 }
 
 // 当前页面组件重新加载
@@ -111,7 +99,7 @@ function closeCurrentRoute() {
 
 function closeListRoute(tag) {
   if (tag.meta.cache && tag.name) {
-    store.commit('keepAlive/delKeepAliveComponentsName', tag.name)
+    keepAliveStore.delKeepAliveComponentsName(tag.name)
   }
   const index = menuList.value.findIndex((item) => item.path === tag.path)
   menuList.value.splice(index, 1)
@@ -178,7 +166,7 @@ function delMenu(menu, nextPath) {
   setTimeout(() => {
     if (!menu.meta.hideClose) {
       if (menu.meta.cache && menu.name) {
-        store.commit('keepAlive/delKeepAliveComponentsName', menu.name)
+        keepAliveStore.delKeepAliveComponentsName(menu.name)
       }
       menuList.value.splice(index, 1)
     }
@@ -217,15 +205,6 @@ function setPosition() {
     }
     domBox.scrollbar.scrollLeft = domData.activeDom.x - domData.activeFather.x + 1 / 2 * domData.activeDom.width - 1 / 2 * domData.scrollbar.width
   }
-}
-
-// 配置需要缓存的数据
-function setKeepAliveData() {
-  let keepAliveNames = []
-  menuList.value.forEach((menu) => {
-    menu.meta && menu.meta.cache && menu.name && keepAliveNames.push(menu.name)
-  })
-  store.commit('keepAlive/setKeepAliveComponentsName', keepAliveNames)
 }
 
 /** 监听鼠标滚动事件 */

@@ -9,7 +9,7 @@ export function login(data) {
   })
 }
 
-export function loginOut() {
+export function logout() {
   return request({
     url: '/user/out',
     method: 'post',

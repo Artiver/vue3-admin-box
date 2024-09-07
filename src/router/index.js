@@ -5,7 +5,8 @@
  */
 import {reactive} from 'vue'
 import {createRouter, createWebHashHistory} from 'vue-router'
-import store from '@/store'
+import {useUserStore} from '@/stores/user.js'
+import {useKeepAliveStore} from '@/stores/keepAlive.js'
 import NProgress from '@/utils/system/nprogress'
 import {changeTitle} from '@/utils/system/title'
 // 引入不需要权限的modules
@@ -32,8 +33,9 @@ const whiteList = ['/login']
 
 // 路由跳转前的监听操作
 router.beforeEach((to, _from, next) => {
-  NProgress.start();
-  if (store.state.user.token) {
+  NProgress.start()
+  const user = useUserStore()
+  if (user.token) {
     to.meta.title ? (changeTitle(to.meta.title)) : "" // 动态title
     if (to.path === '/login') {
       next('/')
@@ -51,10 +53,11 @@ router.beforeEach((to, _from, next) => {
 
 // 路由跳转后的监听操作
 router.afterEach((to, _from) => {
-  const keepAliveComponentsName = store.getters['keepAlive/keepAliveComponentsName'] || []
+  const keepAliveComponents = useKeepAliveStore()
+  const keepAliveComponentsName = keepAliveComponents.keepAliveComponentsName || []
   const name = to.matched[to.matched.length - 1].components.default.name
   if (to.meta && to.meta.cache && name && !keepAliveComponentsName.includes(name)) {
-    store.commit('keepAlive/addKeepAliveComponentsName', name)
+    keepAliveComponents.addKeepAliveComponentsName(name)
   }
   NProgress.done()
 });
