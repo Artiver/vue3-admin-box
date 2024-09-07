@@ -4,8 +4,7 @@ export function login(data) {
   return request({
     url: '/user/login',
     method: 'post',
-    baseURL: '/mock',
-    data
+    data: data
   })
 }
 
@@ -13,6 +12,5 @@ export function logout() {
   return request({
     url: '/user/out',
     method: 'post',
-    baseURL: '/mock'
   })
 }
