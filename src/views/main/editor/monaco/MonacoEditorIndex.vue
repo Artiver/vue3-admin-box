@@ -6,49 +6,49 @@
 </template>
 
 <script setup lang="js">
-import {onBeforeUnmount, onMounted, ref} from 'vue'
-import * as monaco from 'monaco-editor'
-import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
-import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
-import {ElNotification} from "element-plus"
+import {onBeforeUnmount, onMounted, onActivated, ref} from "vue";
+import * as monaco from "monaco-editor";
+import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
+import EditorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
+import {ElNotification} from "element-plus";
 
-const text = ref('const a = 1;')
+const text = ref("const a = 1;");
 
 self.MonacoEnvironment = {
   getWorker(id, label) {
-    if (['typescript', 'javascript'].includes(label)) {
-      return new tsWorker()
+    if (["typescript", "javascript"].includes(label)) {
+      return new tsWorker();
     }
-    return new EditorWorker()
+    return new EditorWorker();
   },
-}
+};
 
-let editor = null
+let editor = null;
 
 function showContent() {
-  const content = editor.getValue()
+  const content = editor.getValue();
   ElNotification({
-    title: 'Content',
+    title: "Content",
     message: content,
-    type: 'success',
-  })
+    type: "success",
+  });
 }
 
 onMounted(() => {
-  editor = monaco.editor.create(document.getElementById('codeEditBox'), {
-    theme: 'vs',
-    language: 'javascript',
+  editor = monaco.editor.create(document.getElementById("codeEditBox"), {
+    theme: "vs",
+    language: "javascript",
     value: text.value,
-  })
-})
+  });
+});
 
 onBeforeUnmount(() => {
-  editor.dispose()
-})
+  editor.dispose();
+});
 
 onActivated(() => {
-  editor.focus()
-})
+  editor.focus();
+});
 </script>
 
 <style scoped lang="scss">

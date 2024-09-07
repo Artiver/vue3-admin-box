@@ -22,16 +22,16 @@ import {useRoute, useRouter} from "vue-router";
 import MenuItem from "./MenuItem.vue";
 import {useAppStore} from "@/stores/app.js";
 
-const appStore = useAppStore()
-const expandOneMenu = computed(() => appStore.other.expandOneMenu)
-const allRoutes = useRouter().options.routes
-const route = useRoute()
+const appStore = useAppStore();
+const expandOneMenu = computed(() => appStore.other.expandOneMenu);
+const allRoutes = useRouter().options.routes;
+const route = useRoute();
 const activeMenu = computed(() => {
-  const {meta, path} = route
+  const {meta, path} = route;
   if (meta.activeMenu) {
-    return meta.activeMenu
+    return meta.activeMenu;
   }
-  return path
+  return path;
 })
 </script>
 

@@ -8,10 +8,10 @@
 </template>
 
 <script setup lang="js">
-import {systemTitle} from '@/config'
-import {useAppStore} from "@/stores/app.js"
+import {systemTitle} from "@/config";
+import {useAppStore} from "@/stores/app.js";
 
-const appStore = useAppStore()
+const appStore = useAppStore();
 </script>
 
 <style scoped lang="scss">

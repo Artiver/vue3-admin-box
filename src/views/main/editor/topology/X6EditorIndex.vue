@@ -12,23 +12,23 @@
 </template>
 
 <script setup lang="js">
-import {h, onMounted} from "vue"
-import {Graph} from "@antv/x6"
-import {Stencil} from '@antv/x6-plugin-stencil'
+import {h, onMounted} from "vue";
+import {Graph} from "@antv/x6";
+import {Stencil} from "@antv/x6-plugin-stencil";
 
-import ContextMenu from '@imengyu/vue3-context-menu'
-import x6Data from "./X6EditorData.js"
+import ContextMenu from "@imengyu/vue3-context-menu";
+import x6Data from "./X6EditorData.js";
 
-let graph = null
+let graph = null;
 
 function initialGraph() {
   graph = new Graph({
-    container: document.getElementById('topology'),
+    container: document.getElementById("topology"),
     background: {
-      color: '#F2F7FA',
+      color: "#F2F7FA",
     },
-  })
-  graph.fromJSON(x6Data.drawData)
+  });
+  graph.fromJSON(x6Data.drawData);
 }
 
 function registerAddons() {
@@ -36,28 +36,28 @@ function registerAddons() {
     target: graph,
     groups: [
       {
-        name: 'group1',
+        name: "group1",
       },
       {
-        name: 'group2',
+        name: "group2",
       },
     ],
-  })
+  });
   const rect1 = graph.createNode({
-    shape: 'rect',
+    shape: "rect",
     width: 50,
     height: 40,
-  })
-  const rect2 = rect1.clone()
+  });
+  const rect2 = rect1.clone();
   const rect3 = graph.createNode({
-    shape: 'ellipse',
+    shape: "ellipse",
     width: 50,
     height: 40,
-  })
-  const rect4 = rect3.clone()
-  document.getElementById('stencil').appendChild(stencil.container)
-  stencil.load([rect1, rect2], 'group1')
-  stencil.load([rect3, rect4], 'group2')
+  });
+  const rect4 = rect3.clone();
+  document.getElementById("stencil").appendChild(stencil.container);
+  stencil.load([rect1, rect2], "group1");
+  stencil.load([rect3, rect4], "group2");
 }
 
 function handleNodeContextmenu(e, cell) {
@@ -66,32 +66,32 @@ function handleNodeContextmenu(e, cell) {
     y: e.pageY,
     items: [
       {
-        label: h('div', {style: {color: '#003a85',}}, "刷新"),
-        icon: h('img', {
-          src: '/img/refresh.svg',
+        label: h("div", {style: {color: "#003a85",}}, "刷新"),
+        icon: h("img", {
+          src: "/img/refresh.svg",
           style: {
-            width: '15px',
-            height: '15px',
+            width: "15px",
+            height: "15px",
           }
         }),
         onClick: () => {
-          console.log(cell)
+          console.log(cell);
         },
       },
     ],
-  })
+  });
 }
 
 function registerEvents() {
   graph.on("node:contextmenu", ({e, x, y, cell, view}) => {
-    handleNodeContextmenu(e, cell)
-  })
+    handleNodeContextmenu(e, cell);
+  });
 }
 
 onMounted(() => {
-  initialGraph()
-  registerEvents()
-  registerAddons()
+  initialGraph();
+  registerEvents();
+  registerAddons();
 })
 </script>
 

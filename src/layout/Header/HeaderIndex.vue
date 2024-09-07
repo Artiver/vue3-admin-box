@@ -45,14 +45,14 @@
 </template>
 
 <script setup lang="js">
-import Breadcrumb from './Breadcrumb.vue'
-import Theme from './functionList/themeIndex.vue'
-import {ArrowDown, CircleCloseFilled, Expand, Fold} from "@element-plus/icons-vue"
-import {useAppStore} from "@/stores/app.js"
-import {useUserStore} from "@/stores/user.js"
+import Breadcrumb from "./Breadcrumb.vue";
+import Theme from "./functionList/themeIndex.vue";
+import {ArrowDown, CircleCloseFilled, Expand, Fold} from "@element-plus/icons-vue";
+import {useAppStore} from "@/stores/app.js";
+import {useUserStore} from "@/stores/user.js";
 
-const userStore = useUserStore()
-const appStore = useAppStore()
+const appStore = useAppStore();
+const userStore = useUserStore();
 </script>
 
 <style scoped lang="scss">

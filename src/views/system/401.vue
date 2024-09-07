@@ -16,16 +16,15 @@
 </template>
 
 <script setup lang="js">
-import {useRouter} from "vue-router"
+import {useRouter} from "vue-router";
+import first from "@/assets/images/401.gif";
 
-import first from "@/assets/images/401.gif"
-
-const router = useRouter()
+const router = useRouter();
 
 function go() {
   router.push({
-    path: '/'
-  })
+    path: "/"
+  });
 }
 </script>
 

@@ -22,46 +22,46 @@
 </template>
 
 <script setup lang="js">
-import {Check} from "@element-plus/icons-vue"
+import {Check} from "@element-plus/icons-vue";
 
 const props = defineProps({
   name: {
     type: String,
-    default: 'default'
+    default: "default"
   },
   active: {
     type: String,
-    default: ''
+    default: ""
   },
   menu: {
     type: String,
-    default: ''
+    default: ""
   },
   logo: {
     type: String,
-    default: ''
+    default: ""
   },
   header: {
     type: String,
-    default: ''
+    default: ""
   },
   main: {
     type: String,
-    default: ''
+    default: ""
   },
   tip: {
     type: String,
-    default: '默认菜单风格'
+    default: "默认菜单风格"
   },
   activeColor: {
     type: String,
-    default: ''
+    default: ""
   }
-})
-const emits = defineEmits(['update:active'])
+});
+const emits = defineEmits(["update:active"]);
 
 const handleClick = () => {
-  emits('update:active', props.name)
+  emits("update:active", props.name);
 }
 </script>
 

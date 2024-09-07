@@ -6,20 +6,19 @@
 </template>
 
 <script setup lang="js">
-import "animate.css"
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from "vue";
+import "animate.css";
+import Vditor from "vditor";
+import "vditor/dist/index.css";
 
-import Vditor from 'vditor'
-import 'vditor/dist/index.css'
-
-const vditor = ref()
+const vditor = ref();
 
 onMounted(() => {
-  vditor.value = new Vditor('markdown-editor',{
-    cdn: '/static/markdown',
+  vditor.value = new Vditor("markdown-editor",{
+    cdn: "/static/markdown",
     cache: {enable: false},
-  })
-})
+  });
+});
 </script>
 
 <style scoped lang="scss">

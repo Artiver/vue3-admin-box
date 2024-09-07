@@ -15,16 +15,16 @@
 </template>
 
 <script setup lang="js">
-import {Close, RefreshRight} from '@element-plus/icons-vue'
+import {Close, RefreshRight} from "@element-plus/icons-vue";
 
 const props = defineProps({
   menu: {
     type: Object,
     default: () => {
       return {
-        path: '',
+        path: "",
         meta: {
-          label: '',
+          label: "",
           hideClose: false
         }
       }
@@ -36,14 +36,14 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['close', 'reload'])
+const emit = defineEmits(["close", "reload"]);
 
 function closeTab() {
-  emit('close')
+  emit("close");
 }
 
 function reload() {
-  emit('reload')
+  emit("reload");
 }
 </script>
 

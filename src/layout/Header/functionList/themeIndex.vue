@@ -54,10 +54,10 @@
 </template>
 
 <script setup lang="js">
-import {reactive, ref, watch} from 'vue'
-import themeIcon from './theme/theme-icon.vue'
-import themeColor from './theme/theme-color.vue'
-import {style} from '@/theme/index'
+import {reactive, ref, watch} from "vue";
+import themeIcon from "./theme/theme-icon.vue";
+import themeColor from "./theme/theme-color.vue";
+import {style} from "@/theme/index";
 import {Setting} from "@element-plus/icons-vue";
 import {useAppStore} from "@/stores/app.js";
 
@@ -67,55 +67,55 @@ const state = reactive({
   primaryColor: appStore.theme.state.primaryColor,
   primaryTextColor: appStore.theme.state.primaryTextColor,
   menuType: appStore.theme.state.menuType
-})
+});
 const themeColorArr = [
-  {color: '#409eff', textColor: '#fff', tip: '默认蓝'},
-  {color: '#d60f20', textColor: '#fff', tip: '玫瑰红'},
-  {color: '#ac25e6', textColor: '#fff', tip: '优雅紫'},
-  {color: '#4dc86f', textColor: '#fff', tip: '故事绿'},
-  {color: '#13c2c2', textColor: '#fff', tip: '明青'},
-  {color: '#333', textColor: '#fff', tip: '极客黑'}
-]
+  {color: "#409eff", textColor: "#fff", tip: "默认蓝"},
+  {color: "#d60f20", textColor: "#fff", tip: "玫瑰红"},
+  {color: "#ac25e6", textColor: "#fff", tip: "优雅紫"},
+  {color: "#4dc86f", textColor: "#fff", tip: "故事绿"},
+  {color: "#13c2c2", textColor: "#fff", tip: "明青"},
+  {color: "#333", textColor: "#fff", tip: "极客黑"}
+];
 
 function setTheme() {
   const userTheme = style[state.style]
-  const body = document.getElementsByTagName('body')[0]
-  body.setAttribute('data-theme', state.style)
-  body.style.setProperty('--system-primary-color', state.primaryColor)
+  const body = document.getElementsByTagName("body")[0]
+  body.setAttribute("data-theme", state.style)
+  body.style.setProperty("--system-primary-color", state.primaryColor)
   for (let i in userTheme) {
-    if (i === 'name') {
+    if (i === "name") {
       continue;
     }
     const item = userTheme[i]
     for (let y in item) {
-      let cssVarName = '--system-' + i + '-' + y.replace(/([A-Z])/g, "-$1").toLowerCase()
+      let cssVarName = "--system-" + i + "-" + y.replace(/([A-Z])/g, "-$1").toLowerCase()
       body.style.setProperty(cssVarName, item[y])
     }
   }
-  appStore.setTheme({ state: { ...state } })
+  appStore.setTheme({state: {...state}})
 }
 
 watch(state, () => {
   setTheme()
-})
+});
 
-let drawer = ref(false)
+let drawer = ref(false);
 const options = reactive([
-  {name: '显示logo', value: appStore.other.showLogo, store: 'showLogo'},
-  {name: '显示面包屑导航', value: appStore.other.showBreadCrumb, store: 'showBreadCrumb'},
-  {name: '显示标签页导航', value: appStore.other.showTabs, store: 'showTabs'},
-  {name: '保持一个菜单展开', value: appStore.other.expandOneMenu, store: 'expandOneMenu'}
-])
+  {name: "显示Logo", value: appStore.other.showLogo, store: "showLogo"},
+  {name: "显示面包屑导航", value: appStore.other.showBreadCrumb, store: "showBreadCrumb"},
+  {name: "显示标签页导航", value: appStore.other.showTabs, store: "showTabs"},
+  {name: "保持一个菜单展开", value: appStore.other.expandOneMenu, store: "expandOneMenu"}
+]);
 
 function drawerChange(value) {
-  drawer.value = value
+  drawer.value = value;
 }
 
 function change(option) {
-  appStore.setState({store: option.store, value: option.value})
+  appStore.setState({store: option.store, value: option.value});
 }
 
-setTheme()
+setTheme();
 </script>
 
 <style scoped lang="scss">

@@ -15,30 +15,28 @@
 </template>
 
 <script setup lang="js">
-import {ref, watch} from "vue"
-import {useRoute, useRouter} from "vue-router"
+import {ref, watch} from "vue";
+import {useRoute, useRouter} from "vue-router";
 
-const levelList = ref([])
-const route = useRoute()
-const router = useRouter()
+const levelList = ref([]);
+const route = useRoute();
+const router = useRouter();
 
 function getBreadcrumb() {
-  let matched = route.matched.filter(item => item.meta && item.meta.title)
-  levelList.value = matched.filter(
-      item => item.meta && item.meta.title && item.meta.breadcrumb !== false
-  )
+  let matched = route.matched.filter(item => item.meta && item.meta.title);
+  levelList.value = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false);
 }
 
 function handleLink(item) {
-  const {redirect, path} = item
+  const {redirect, path} = item;
   if (redirect) {
-    router.push(redirect.toString())
-    return
+    router.push(redirect.toString());
+    return;
   }
-  router.push(path)
+  router.push(path);
 }
 
-getBreadcrumb()
+getBreadcrumb();
 
 watch(
     () => route.path,

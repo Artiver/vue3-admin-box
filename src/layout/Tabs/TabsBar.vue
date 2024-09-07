@@ -43,75 +43,75 @@
 </template>
 
 <script setup lang="js">
-import {computed, nextTick, reactive, ref, watch} from 'vue'
-import {useRoute, useRouter} from 'vue-router'
-import {ArrowDown, CircleClose, Refresh} from '@element-plus/icons-vue'
-import Item from './item.vue'
-import tabsHook from './tabsHook'
+import {computed, nextTick, reactive, ref, watch} from "vue";
+import {useRoute, useRouter} from "vue-router";
+import {ArrowDown, CircleClose, Refresh} from "@element-plus/icons-vue";
+import Item from "./item.vue";
+import tabsHook from "./tabsHook";
 import {useKeepAliveStore} from "@/stores/keepAlive.js";
 
-const keepAliveStore = useKeepAliveStore()
-const route = useRoute()
-const router = useRouter()
+const keepAliveStore = useKeepAliveStore();
+const route = useRoute();
+const router = useRouter();
 
-const scrollbarDom = ref(null)
-const scrollLeft = ref(0)
+const scrollbarDom = ref(null);
+const scrollLeft = ref(0);
 const defaultMenu = {
-  path: '/dashboard',
-  meta: {title: '首页', hideClose: true}
-}
-const currentDisabled = computed(() => route.path === defaultMenu.path)
-const closeTimeAfter = 256
+  path: "/dashboard",
+  meta: {title: "首页", hideClose: true}
+};
+const currentDisabled = computed(() => route.path === defaultMenu.path);
+const closeTimeAfter = 256;
 
-let activeMenu = reactive({path: ''})
-let menuList = ref(tabsHook.getItem())
+let activeMenu = reactive({path: ""});
+let menuList = ref(tabsHook.getItem());
 if (menuList.value.length === 0) {
-  addMenu(defaultMenu)
+  addMenu(defaultMenu);
 }
 
 watch(menuList.value, (newVal) => {
-  tabsHook.setItem(newVal)
+  tabsHook.setItem(newVal);
 })
 
 router.afterEach(() => {
-  addMenu(route)
-  initMenu(route)
+  addMenu(route);
+  initMenu(route);
 })
 
 function getComponentName(menu) {
-  return menu.matched?.slice(-1)[0].components.default.name
+  return menu.matched?.slice(-1)[0].components.default.name;
 }
 
 // 当前页面组件重新加载
 function pageReload() {
-  const self = route.matched[route.matched.length - 1].instances.default
+  const self = route.matched[route.matched.length - 1].instances.default;
   self.handleReload();
 }
 
 // 关闭当前标签，首页不关闭
 function closeCurrentRoute() {
   if (route.path !== defaultMenu.path) {
-    const tab = document.getElementById('vueAdminBoxTabCloseSelf')
-    const nextPath = tab?.getAttribute('nextPath')
-    delMenu(route, nextPath)
+    const tab = document.getElementById("vueAdminBoxTabCloseSelf");
+    const nextPath = tab?.getAttribute("nextPath");
+    delMenu(route, nextPath);
   }
 }
 
 function closeListRoute(tag) {
   if (tag.meta.cache && tag.name) {
-    keepAliveStore.delKeepAliveComponentsName(tag.name)
+    keepAliveStore.delKeepAliveComponentsName(tag.name);
   }
-  const index = menuList.value.findIndex((item) => item.path === tag.path)
-  menuList.value.splice(index, 1)
+  const index = menuList.value.findIndex((item) => item.path === tag.path);
+  menuList.value.splice(index, 1);
 }
 
 // 关闭除了当前标签之外的所有标签
 function closeOtherRoute() {
-  const items = menuList.value
+  const items = menuList.value;
   for (let tag of items) {
     setTimeout(() => {
       if (!tag.meta.hideClose && tag.path !== activeMenu.path) {
-        closeListRoute(tag)
+        closeListRoute(tag);
       }
     }, closeTimeAfter);
   }
@@ -119,12 +119,12 @@ function closeOtherRoute() {
 
 // 关闭所有的标签，除了首页
 function closeAllRoute() {
-  router.push(defaultMenu.path)
-  const items = menuList.value
+  router.push(defaultMenu.path);
+  const items = menuList.value;
   for (let tag of items) {
     setTimeout(() => {
       if (!tag.meta.hideClose) {
-        closeListRoute(tag)
+        closeListRoute(tag);
       }
     }, closeTimeAfter);
   }
@@ -132,52 +132,52 @@ function closeAllRoute() {
 
 // 添加新的菜单项
 function addMenu(menu) {
-  let {path, meta, query} = menu
-  let name = getComponentName(menu)
+  let {path, meta, query} = menu;
+  let name = getComponentName(menu);
   if (meta.hideTabs) {
-    return
+    return;
   }
   let hasMenu = menuList.value.some((obj) => {
-    return obj.path === path
-  })
+    return obj.path === path;
+  });
   if (!hasMenu) {
     menuList.value.push({
       path,
       meta,
       name,
       query
-    })
+    });
   }
 }
 
 // 删除菜单项
 function delMenu(menu, nextPath) {
-  let index = 0
-  index = menuList.value.findIndex((item) => item.path === menu.path)
+  let index = 0;
+  index = menuList.value.findIndex((item) => item.path === menu.path);
   if (nextPath) {
-    router.push(nextPath)
-    return
+    router.push(nextPath);
+    return;
   }
   // 若删除的是当前页面，回到前一页，若为最后一页，则回到默认的首页
   if (menu.path === activeMenu.path) {
-    const prePage = index - 1 > 0 ? menuList.value[index - 1] : {path: defaultMenu.path}
-    router.push({path: prePage.path, query: prePage.query || {}})
+    const prePage = index - 1 > 0 ? menuList.value[index - 1] : {path: defaultMenu.path};
+    router.push({path: prePage.path, query: prePage.query || {}});
   }
   setTimeout(() => {
     if (!menu.meta.hideClose) {
       if (menu.meta.cache && menu.name) {
-        keepAliveStore.delKeepAliveComponentsName(menu.name)
+        keepAliveStore.delKeepAliveComponentsName(menu.name);
       }
-      menuList.value.splice(index, 1)
+      menuList.value.splice(index, 1);
     }
   }, closeTimeAfter);
 }
 
 // 初始化activeMenu
 function initMenu(menu) {
-  activeMenu = menu
+  activeMenu = menu;
   nextTick(() => {
-    setPosition()
+    setPosition();
   })
 }
 
@@ -186,47 +186,47 @@ function setPosition() {
   if (scrollbarDom.value) {
     const domBox = {
       scrollbar: scrollbarDom.value.wrapRef,
-      activeDom: scrollbarDom.value.wrapRef.querySelector('.active'),
-      activeFather: scrollbarDom.value.wrapRef.querySelector('.el-scrollbar__view')
-    }
-    let hasDomElements = true
+      activeDom: scrollbarDom.value.wrapRef.querySelector(".active"),
+      activeFather: scrollbarDom.value.wrapRef.querySelector(".el-scrollbar__view")
+    };
+    let hasDomElements = true;
     Object.keys(domBox).forEach((dom) => {
       if (!dom) {
-        hasDomElements = false
+        hasDomElements = false;
       }
-    })
+    });
     if (!hasDomElements) {
-      return
+      return;
     }
     const domData = {
       scrollbar: domBox.scrollbar.getBoundingClientRect(),
       activeDom: domBox.activeDom.getBoundingClientRect(),
       activeFather: domBox.activeFather.getBoundingClientRect()
-    }
-    domBox.scrollbar.scrollLeft = domData.activeDom.x - domData.activeFather.x + 1 / 2 * domData.activeDom.width - 1 / 2 * domData.scrollbar.width
+    };
+    domBox.scrollbar.scrollLeft = domData.activeDom.x - domData.activeFather.x + 1 / 2 * domData.activeDom.width - 1 / 2 * domData.scrollbar.width;
   }
 }
 
 /** 监听鼠标滚动事件 */
 function handleWheelScroll(e) {
-  let distance = 0
-  let speed = 5
+  let distance = 0;
+  let speed = 5;
   if (e.wheelDelta > 30) {
-    distance = -10
+    distance = -10;
   } else if (e.wheelDelta < -30) {
-    distance = 10
+    distance = 10;
   }
-  scrollbarDom.value?.setScrollLeft(scrollLeft.value + distance * speed)
+  scrollbarDom.value?.setScrollLeft(scrollLeft.value + distance * speed);
 }
 
 /** 监听滚动事件 */
 function handleScroll({scrollLeft: left}) {
-  scrollLeft.value = left
+  scrollLeft.value = left;
 }
 
 // 初始化时调用：1. 新增菜单 2. 初始化activeMenu
-addMenu(route)
-initMenu(route)
+addMenu(route);
+initMenu(route);
 </script>
 
 <style scoped lang="scss">

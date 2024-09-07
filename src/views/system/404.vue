@@ -19,17 +19,16 @@
 </template>
 
 <script setup lang="js">
-import {useRouter} from "vue-router"
+import {useRouter} from "vue-router";
+import four from "@/assets/images/404.png";
+import four_cloud from "@/assets/images/404_cloud.png";
 
-import four from "@/assets/images/404.png"
-import four_cloud from "@/assets/images/404_cloud.png"
-
-const router = useRouter()
+const router = useRouter();
 
 function go() {
   router.push({
-    path: '/'
-  })
+    path: "/"
+  });
 }
 </script>
 

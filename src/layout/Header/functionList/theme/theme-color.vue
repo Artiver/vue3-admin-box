@@ -13,36 +13,36 @@
 </template>
 
 <script setup lang="js">
-import {Check} from "@element-plus/icons-vue"
+import {Check} from "@element-plus/icons-vue";
 
 const props = defineProps({
   active: {
     type: String,
-    default: ''
+    default: ""
   },
   activeTextColor: {
     type: String,
-    default: ''
+    default: ""
   },
   tip: {
     type: String,
-    default: '默认蓝'
+    default: "默认蓝"
   },
   color: {
     type: String,
-    default: '#409eff'
+    default: "#409eff"
   },
   textColor: {
     type: String,
-    default: '#fff'
+    default: "#fff"
   }
-})
-const emits = defineEmits(['update:active', 'update:activeTextColor'])
+});
+const emits = defineEmits(["update:active", "update:activeTextColor"]);
 
 const handleClick = () => {
-  emits('update:active', props.color)
-  emits('update:activeTextColor', props.textColor)
-}
+  emits("update:active", props.color)
+  emits("update:activeTextColor", props.textColor)
+};
 </script>
 
 <style scoped lang="scss">

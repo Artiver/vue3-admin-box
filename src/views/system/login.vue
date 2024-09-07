@@ -62,62 +62,63 @@ import {systemSubTitle, systemTitle, WelcomeDescription} from "@/config";
 import {Key, User, View as ViewEye} from "@element-plus/icons-vue";
 import {useUserStore} from "@/stores/user.js";
 
-const router = useRouter()
-const userStore = useUserStore()
+const router = useRouter();
+const userStore = useUserStore();
 const form = reactive({
-  username: '',
-  password: '',
+  username: "",
+  password: "",
   loading: false
-})
-const passwordType = ref('password')
+});
+const passwordType = ref("password");
 
 function viewPassword() {
-  passwordType.value = ""
+  passwordType.value = "";
 }
 
 function hidePassword() {
-  passwordType.value = "password"
+  passwordType.value = "password";
 }
 
 function checkForm() {
   return new Promise((resolve) => {
-    if (form.username === '') {
+    if (form.username === "") {
       ElMessage({
-        message: 'username is empty',
-        type: 'warning'
-      })
-      return
+        message: "username is empty",
+        type: "warning"
+      });
+      return;
     }
-    if (form.password === '') {
+    if (form.password === "") {
       ElMessage({
-        message: 'password is empty',
-        type: 'warning'
-      })
-      return
+        message: "password is empty",
+        type: "warning"
+      });
+      return;
     }
-    resolve(true)
-  })
+    resolve(true);
+  });
 }
 
 function submit() {
   checkForm().then(() => {
-    form.loading = true
+    form.loading = true;
     let params = {
       username: form.username,
       password: form.password
-    }
+    };
     userStore.logIn(params).then(() => {
       ElMessage({
-        message: 'Login successfully',
-        type: 'success',
+        message: "Login successfully",
+        type: "success",
         showClose: true,
         duration: 1000
-      })
-      location.reload()
-    }).catch(() => {}).finally(() => {
-      form.loading = false
+      });
+      location.reload();
+    }).catch(() => {
+    }).finally(() => {
+      form.loading = false;
     })
-  })
+  });
 }
 </script>
 
@@ -126,7 +127,7 @@ function submit() {
   position: relative;
   width: 100vw;
   height: 100vh;
-  background: #fff url('@/assets/login/bg.png') no-repeat center;
+  background: #fff url("@/assets/login/bg.png") no-repeat center;
   overflow: hidden;
   background-size: cover;
   user-select: none;

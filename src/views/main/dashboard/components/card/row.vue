@@ -20,7 +20,7 @@ const props = defineProps({
       return {}
     }
   }
-})
+});
 </script>
 
 <style scoped lang="scss">

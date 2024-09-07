@@ -38,8 +38,8 @@
 </template>
 
 <script setup lang="js">
-import {computed} from 'vue'
-import appLink from './Link.vue'
+import {computed} from "vue";
+import appLink from "./Link.vue";
 
 const props = defineProps({
   menu: {
@@ -48,39 +48,39 @@ const props = defineProps({
   },
   basePath: {
     type: String,
-    default: ''
+    default: ""
   }
-})
+});
 
-const menu = props.menu
+const menu = props.menu;
 // todo: 优化if结构
 const showMenuType = computed(() => { // 0: 无子菜单， 1：有1个子菜单， 2：显示上下级子菜单
   if (menu.children && (menu.children.length > 1 || (menu.children.length === 1 && menu.alwayShow))) {
-    return 2
+    return 2;
   } else if (menu.children && menu.children.length === 1 && !menu.alwayShow) {
-    return 1
+    return 1;
   } else {
-    return 0
+    return 0;
   }
-})
+});
 // todo: 优化多层if
 const pathResolve = computed(() => {
-  let path = ''
+  let path;
   if (showMenuType.value === 1) {
-    if (menu.children[0].path.charAt(0) === '/') {
-      path = menu.children[0].path
+    if (menu.children[0].path.charAt(0) === "/") {
+      path = menu.children[0].path;
     } else {
-      let char = '/'
-      if (menu.path.charAt(menu.path.length - 1) === '/') {
-        char = ''
+      let char = "/";
+      if (menu.path.charAt(menu.path.length - 1) === "/") {
+        char = "";
       }
-      path = menu.path + char + menu.children[0].path
+      path = menu.path + char + menu.children[0].path;
     }
   } else {
-    path = menu.path
+    path = menu.path;
   }
-  path = props.basePath ? props.basePath + '/' + path : path
-  return path
+  path = props.basePath ? props.basePath + "/" + path : path;
+  return path;
 })
 </script>
 
