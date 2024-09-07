@@ -1,9 +1,9 @@
 import {defineStore} from "pinia";
 import {login, logout} from "@/api/user.js";
 
-export const useUserStore = defineStore('user', {
+export const useUserStore = defineStore("user", {
     state: () => ({
-        token: '',
+        token: "",
     }),
     getters: {},
     actions: {
@@ -15,7 +15,7 @@ export const useUserStore = defineStore('user', {
                 // }).catch(err => {
                 //     reject(err)
                 // })
-                this.token = 'admin'
+                this.token = "admin"
                 resolve(true)
             })
         },
@@ -23,14 +23,14 @@ export const useUserStore = defineStore('user', {
             // logout().then(res => {
             // }).catch(error => {
             // }).finally(() => {
-            //     localStorage.removeItem('user')
-            //     localStorage.removeItem('tabs')
-            //     localStorage.removeItem('keepAlive')
+            //     localStorage.removeItem("user")
+            //     localStorage.removeItem("tabs")
+            //     localStorage.removeItem("keepAlive")
             //     location.reload()
             // })
-            localStorage.removeItem('user')
-            localStorage.removeItem('tabs')
-            localStorage.removeItem('keepAlive')
+            localStorage.removeItem("user")
+            localStorage.removeItem("tabs")
+            localStorage.removeItem("keepAlive")
             location.reload()
         }
     },

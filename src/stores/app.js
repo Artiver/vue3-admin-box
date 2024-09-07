@@ -1,15 +1,15 @@
-import {defineStore} from 'pinia'
+import {defineStore} from "pinia";
 
-export const useAppStore = defineStore('app', {
+export const useAppStore = defineStore("app", {
     state: () => ({
         isCollapse: false, // 侧边栏是否收缩展示
-        elementSize: 'small', // element默认尺寸，支持官网large / default / small小参数
+        elementSize: "small", // element默认尺寸，支持官网large / default / small小参数
         theme: {
             state: {
-                style: 'default',
-                primaryColor: '#409eff',
-                primaryTextColor: '#000000',
-                menuType: 'side'
+                style: "default",
+                primaryColor: "#409eff",
+                primaryTextColor: "#000000",
+                menuType: "side"
             }
         },
         other: {

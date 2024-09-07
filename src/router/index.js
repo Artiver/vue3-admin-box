@@ -1,24 +1,13 @@
-/**
- * @description 所有人可使用的参数配置列表
- * @params hideMenu: 是否隐藏当前路由结点不在导航中展示
- * @params alwaysShow: 只有一个子路由时是否总是展示菜单，默认false
- */
-import {reactive} from 'vue'
-import {createRouter, createWebHashHistory} from 'vue-router'
-import {useUserStore} from '@/stores/user.js'
-import {useKeepAliveStore} from '@/stores/keepAlive.js'
-import NProgress from '@/utils/system/nprogress'
-import {changeTitle} from '@/utils/system/title'
-// 引入不需要权限的modules
-import System from './modules/system'
+import {reactive} from "vue";
+import {createRouter, createWebHashHistory} from "vue-router";
+import {useUserStore} from "@/stores/user.js";
+import {useKeepAliveStore} from "@/stores/keepAlive.js";
+import NProgress from "@/utils/system/nprogress";
+import {changeTitle} from "@/utils/system/title";
+import System from "./modules/system";
 
 NProgress.configure({showSpinner: false})
 
-/**
- * @name 初始化必须要的路由
- * @description 使用reactive属性使得modules可以在路由菜单里面实时响应，搞定菜单回显的问题
- * @detail 针对modules的任何修改，均会同步至菜单级别，记住，是针对变量名为：modules的修改
- **/
 let modules = reactive([
   ...System
 ])
@@ -29,7 +18,7 @@ const router = createRouter({
 })
 
 // 未授权时可访问的白名单
-const whiteList = ['/login']
+const whiteList = ["/login"]
 
 // 路由跳转前的监听操作
 router.beforeEach((to, _from, next) => {
@@ -37,8 +26,8 @@ router.beforeEach((to, _from, next) => {
   const user = useUserStore()
   if (user.token) {
     to.meta.title ? (changeTitle(to.meta.title)) : "" // 动态title
-    if (to.path === '/login') {
-      next('/')
+    if (to.path === "/login") {
+      next("/")
       return
     }
     next()

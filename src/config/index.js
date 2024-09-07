@@ -1,6 +1,7 @@
-const systemTitle = 'Manage System'
-const systemSubTitle = 'Effective'
-const WelcomeDescription = 'Welcome'
+const systemTitle = "Manage System";
+const systemSubTitle = "Effective";
+const WelcomeDescription = "Welcome";
+
 export {
   systemTitle,
   systemSubTitle,

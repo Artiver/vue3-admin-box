@@ -1,6 +1,6 @@
-import {defineStore} from 'pinia'
+import {defineStore} from "pinia";
 
-export const useKeepAliveStore = defineStore('keepAlive', {
+export const useKeepAliveStore = defineStore("keepAlive", {
     state: () => ({
         keepAliveComponentsName: []
     }),
