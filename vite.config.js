@@ -1,33 +1,31 @@
-import {defineConfig} from 'vite'
-import vue from '@vitejs/plugin-vue'
-import {viteMockServe} from 'vite-plugin-mock'
-import {vitePluginSvg} from "@webxrd/vite-plugin-svg"
-import {resolve} from 'path'
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
-import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
+import {defineConfig} from "vite";
+import vue from "@vitejs/plugin-vue";
+import {vitePluginSvg} from "@webxrd/vite-plugin-svg";
+import {resolve} from "path";
+import AutoImport from "unplugin-auto-import/vite";
+import Components from "unplugin-vue-components/vite";
+import {ElementPlusResolver} from "unplugin-vue-components/resolvers";
 
 const pathResolve = (dir) => {
-  return resolve(__dirname, ".", dir)
-}
+  return resolve(__dirname, ".", dir);
+};
 
 const alias = {
-  '@': pathResolve("src")
-}
+  "@": pathResolve("src")
+};
 
 /**
  * @description-cn vite官网
  * https://vitejs.cn/config/ */
 export default defineConfig(({command, mode}) => {
-  const prodMock = true
   return {
-    base: './',
+    base: "./",
     resolve: {
       alias
     },
     server: {
       port: 3001,
-      host: '0.0.0.0',
+      host: "0.0.0.0",
       open: false
     },
     build: {
@@ -39,13 +37,13 @@ export default defineConfig(({command, mode}) => {
       vue(),
       AutoImport({
         // 自动导入 Vue 相关函数，如：ref, reactive, toRef 等
-        imports: ['vue'],
+        imports: ["vue"],
         resolvers: [
           // 自动导入 Element Plus 相关函数，如：ElMessage, ElMessageBox... (带样式)
           ElementPlusResolver(),
           // 自动导入图标组件
           // IconsResolver({
-          //     prefix: 'Icon',
+          //     prefix: "Icon",
           // })
         ],
       }),
@@ -55,42 +53,31 @@ export default defineConfig(({command, mode}) => {
           ElementPlusResolver(),
           // 自动注册图标组件
           // IconsResolver({
-          //     enabledCollections: ['ep'],
+          //     enabledCollections: ["ep"],
           // }),
         ],
       }),
       // Icons({
       //     autoInstall: true,
       // }),
-      viteMockServe({
-        mockPath: 'mock',
-        localEnabled: command === 'serve',
-        prodEnabled: command !== 'serve' && prodMock,
-        watchFiles: true,
-        injectCode: `
-          import { setupProdMockServer } from '../mockProdServer';
-          setupProdMockServer();
-        `,
-        logger: true,
-      }),
       vitePluginSvg({
         // 必要的 必须是绝对路径组成的数组
         iconDirs: [
-          resolve(__dirname, 'src/assets/svg'),
+          resolve(__dirname, "src/assets/svg"),
         ],
         // 必要的 入口script
-        main: resolve(__dirname, 'src/main.js'),
-        symbolIdFormat: 'icon-[name]'
+        main: resolve(__dirname, "src/main.js"),
+        symbolIdFormat: "icon-[name]"
       }),
     ],
     css: {
       postcss: {
         plugins: [
           {
-            postcssPlugin: 'internal:charset-removal',
+            postcssPlugin: "internal:charset-removal",
             AtRule: {
               charset: (atRule) => {
-                if (atRule.name === 'charset') {
+                if (atRule.name === "charset") {
                   atRule.remove();
                 }
               }
@@ -100,4 +87,4 @@ export default defineConfig(({command, mode}) => {
       },
     }
   };
-})
+});
