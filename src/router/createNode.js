@@ -14,17 +14,13 @@ export function createNameComponent(component) {
           props: comm.default.props || {},
           setup() {
             const isReload = ref(false);
-            let timeOut = null;
             const handleReload = () => {
               isReload.value = true;
-              timeOut && clearTimeout(timeOut);
               NProgress.start();
-              timeOut = setTimeout(() => {
-                nextTick(() => {
-                  NProgress.done();
-                  isReload.value = false;
-                });
-              }, 260);
+              nextTick(() => {
+                NProgress.done();
+                isReload.value = false;
+              });
             };
             return {
               isReload,

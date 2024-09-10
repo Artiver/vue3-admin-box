@@ -26,9 +26,6 @@
           <el-dropdown-menu>
             <el-dropdown-item class="tab-dropdown-item" :icon="Refresh" @click="pageReload">重新加载
             </el-dropdown-item>
-            <el-dropdown-item class="tab-dropdown-item" :icon="CircleClose" :disabled="currentDisabled"
-                              @click="closeCurrentRoute">关闭当前标签
-            </el-dropdown-item>
             <el-dropdown-item class="tab-dropdown-item" :icon="CircleClose" :disabled="menuList.length < 3"
                               @click="closeOtherRoute">关闭其他标签
             </el-dropdown-item>
@@ -43,7 +40,7 @@
 </template>
 
 <script setup lang="js">
-import {computed, nextTick, reactive, ref, watch} from "vue";
+import {nextTick, reactive, ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {ArrowDown, CircleClose, Refresh} from "@element-plus/icons-vue";
 import Item from "./item.vue";
@@ -60,8 +57,6 @@ const defaultMenu = {
   path: "/dashboard",
   meta: {title: "首页", hideClose: true}
 };
-const currentDisabled = computed(() => route.path === defaultMenu.path);
-const closeTimeAfter = 256;
 
 let activeMenu = reactive({path: ""});
 let menuList = ref(tabsHook.getItem());
@@ -88,15 +83,6 @@ function pageReload() {
   self.handleReload();
 }
 
-// 关闭当前标签，首页不关闭
-function closeCurrentRoute() {
-  if (route.path !== defaultMenu.path) {
-    const tab = document.getElementById("vueAdminBoxTabCloseSelf");
-    const nextPath = tab?.getAttribute("nextPath");
-    delMenu(route, nextPath);
-  }
-}
-
 function closeListRoute(tag) {
   if (tag.meta.cache && tag.name) {
     keepAliveStore.delKeepAliveComponentsName(tag.name);
@@ -107,26 +93,22 @@ function closeListRoute(tag) {
 
 // 关闭除了当前标签之外的所有标签
 function closeOtherRoute() {
-  const items = menuList.value;
+  const items = tabsHook.getItem();
   for (let tag of items) {
-    setTimeout(() => {
-      if (!tag.meta.hideClose && tag.path !== activeMenu.path) {
-        closeListRoute(tag);
-      }
-    }, closeTimeAfter);
+    if (!tag.meta.hideClose && tag.path !== activeMenu.path) {
+      closeListRoute(tag);
+    }
   }
 }
 
 // 关闭所有的标签，除了首页
 function closeAllRoute() {
   router.push(defaultMenu.path);
-  const items = menuList.value;
+  const items = tabsHook.getItem();
   for (let tag of items) {
-    setTimeout(() => {
-      if (!tag.meta.hideClose) {
-        closeListRoute(tag);
-      }
-    }, closeTimeAfter);
+    if (!tag.meta.hideClose) {
+      closeListRoute(tag);
+    }
   }
 }
 
@@ -152,25 +134,22 @@ function addMenu(menu) {
 
 // 删除菜单项
 function delMenu(menu, nextPath) {
-  let index = 0;
-  index = menuList.value.findIndex((item) => item.path === menu.path);
+  let index = menuList.value.findIndex((item) => item.path === menu.path);
   if (nextPath) {
     router.push(nextPath);
     return;
+  }
+  if (!menu.meta.hideClose) {
+    if (menu.meta.cache && menu.name) {
+      keepAliveStore.delKeepAliveComponentsName(menu.name);
+    }
+    menuList.value.splice(index, 1);
   }
   // 若删除的是当前页面，回到前一页，若为最后一页，则回到默认的首页
   if (menu.path === activeMenu.path) {
     const prePage = index - 1 > 0 ? menuList.value[index - 1] : {path: defaultMenu.path};
     router.push({path: prePage.path, query: prePage.query || {}});
   }
-  setTimeout(() => {
-    if (!menu.meta.hideClose) {
-      if (menu.meta.cache && menu.name) {
-        keepAliveStore.delKeepAliveComponentsName(menu.name);
-      }
-      menuList.value.splice(index, 1);
-    }
-  }, closeTimeAfter);
 }
 
 // 初始化activeMenu
@@ -241,7 +220,7 @@ initMenu(route);
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .1);
 
   .handle {
-    min-width: 95px;
+    min-width: 50px;
     height: 100%;
     display: flex;
     align-items: center;
