@@ -1,6 +1,6 @@
 import axios from "axios";
-import {ElMessage} from "element-plus";
 import {useUserStore} from "@/stores/user.js";
+import elMessage from "@/utils/system/element-ui-wrap.js";
 
 const baseURL = import.meta.env.VITE_BASE_URL;
 
@@ -46,11 +46,7 @@ function showError(error) {
         const user = useUserStore();
         user.logOut();
     } else {
-        ElMessage({
-            message: error.msg || error.message || "服务异常",
-            type: "error",
-            duration: 3 * 1000
-        });
+        elMessage.msgError(error.msg || error.message || "服务异常");
     }
 }
 

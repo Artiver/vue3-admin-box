@@ -56,7 +56,7 @@
 <script setup lang="js">
 import {reactive, ref} from "vue";
 import {useRouter} from "vue-router";
-import {ElMessage} from "element-plus";
+import elMessage from "@/utils/system/element-ui-wrap.js";
 import loginLeftPng from "@/assets/login/left.jpg";
 import {systemSubTitle, systemTitle, WelcomeDescription} from "@/config";
 import {Key, User, View as ViewEye} from "@element-plus/icons-vue";
@@ -82,17 +82,11 @@ function hidePassword() {
 function checkForm() {
   return new Promise((resolve) => {
     if (form.username === "") {
-      ElMessage({
-        message: "username is empty",
-        type: "warning"
-      });
+      elMessage.msgWarning("username is empty");
       return;
     }
     if (form.password === "") {
-      ElMessage({
-        message: "password is empty",
-        type: "warning"
-      });
+      elMessage.msgWarning("password is empty");
       return;
     }
     resolve(true);
@@ -107,12 +101,7 @@ function submit() {
       password: form.password
     };
     userStore.logIn(params).then(() => {
-      ElMessage({
-        message: "Login successfully",
-        type: "success",
-        showClose: true,
-        duration: 1000
-      });
+      elMessage.msgSuccess("Login successfully");
       location.reload();
     }).catch(() => {
     }).finally(() => {
