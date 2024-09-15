@@ -7,7 +7,7 @@
         @scroll="handleScroll"
     >
       <Item
-          v-for="menu in menuList"
+          v-for="menu in tabInfo"
           :key="menu.meta.title"
           :menu="menu"
           :active="activeMenu.path === menu.path"
@@ -26,10 +26,10 @@
           <el-dropdown-menu>
             <el-dropdown-item class="tab-dropdown-item" :icon="Refresh" @click="pageReload">重新加载
             </el-dropdown-item>
-            <el-dropdown-item class="tab-dropdown-item" :icon="CircleClose" :disabled="menuList.length < 3"
+            <el-dropdown-item class="tab-dropdown-item" :icon="CircleClose" :disabled="tabInfo.length < 3"
                               @click="closeOtherRoute">关闭其他标签
             </el-dropdown-item>
-            <el-dropdown-item class="tab-dropdown-item" :icon="CircleClose" :disabled="menuList.length <= 1"
+            <el-dropdown-item class="tab-dropdown-item" :icon="CircleClose" :disabled="tabInfo.length <= 1"
                               @click="closeAllRoute">关闭所有标签
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -40,13 +40,15 @@
 </template>
 
 <script setup lang="js">
-import {nextTick, reactive, ref, watch} from "vue";
+import {nextTick, reactive, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
+import {storeToRefs} from "pinia";
 import {ArrowDown, CircleClose, Refresh} from "@element-plus/icons-vue";
 import Item from "./item.vue";
-import tabsHook from "./tabsHook";
 import {useKeepAliveStore} from "@/stores/keepAlive.js";
+import {useTabStore} from "@/stores/tab.js";
 
+const tabStore = useTabStore();
 const keepAliveStore = useKeepAliveStore();
 const route = useRoute();
 const router = useRouter();
@@ -59,19 +61,15 @@ const defaultMenu = {
 };
 
 let activeMenu = reactive({path: ""});
-let menuList = ref(tabsHook.getItem());
-if (menuList.value.length === 0) {
+const {tabInfo} = storeToRefs(tabStore);
+if (tabInfo.value.length === 0) {
   addMenu(defaultMenu);
 }
-
-watch(menuList.value, (newVal) => {
-  tabsHook.setItem(newVal);
-})
 
 router.afterEach(() => {
   addMenu(route);
   initMenu(route);
-})
+});
 
 function getComponentName(menu) {
   return menu.matched?.slice(-1)[0].components.default.name;
@@ -87,13 +85,13 @@ function closeListRoute(tag) {
   if (tag.meta.cache && tag.name) {
     keepAliveStore.delKeepAliveComponentsName(tag.name);
   }
-  const index = menuList.value.findIndex((item) => item.path === tag.path);
-  menuList.value.splice(index, 1);
+  const index = tabInfo.value.findIndex((item) => item.path === tag.path);
+  tabStore.removeTabInfo(index);
 }
 
 // 关闭除了当前标签之外的所有标签
 function closeOtherRoute() {
-  const items = tabsHook.getItem();
+  const items = [...tabStore.tabInfo];
   for (let tag of items) {
     if (!tag.meta.hideClose && tag.path !== activeMenu.path) {
       closeListRoute(tag);
@@ -104,7 +102,7 @@ function closeOtherRoute() {
 // 关闭所有的标签，除了首页
 function closeAllRoute() {
   router.push(defaultMenu.path);
-  const items = tabsHook.getItem();
+  const items = [...tabStore.tabInfo];
   for (let tag of items) {
     if (!tag.meta.hideClose) {
       closeListRoute(tag);
@@ -119,11 +117,11 @@ function addMenu(menu) {
   if (meta.hideTabs) {
     return;
   }
-  let hasMenu = menuList.value.some((obj) => {
+  let hasMenu = tabInfo.value.some((obj) => {
     return obj.path === path;
   });
   if (!hasMenu) {
-    menuList.value.push({
+    tabStore.addTabInfo({
       path,
       meta,
       name,
@@ -134,7 +132,7 @@ function addMenu(menu) {
 
 // 删除菜单项
 function delMenu(menu, nextPath) {
-  let index = menuList.value.findIndex((item) => item.path === menu.path);
+  let index = tabInfo.value.findIndex((item) => item.path === menu.path);
   if (nextPath) {
     router.push(nextPath);
     return;
@@ -143,11 +141,11 @@ function delMenu(menu, nextPath) {
     if (menu.meta.cache && menu.name) {
       keepAliveStore.delKeepAliveComponentsName(menu.name);
     }
-    menuList.value.splice(index, 1);
+    tabStore.removeTabInfo(index);
   }
   // 若删除的是当前页面，回到前一页，若为最后一页，则回到默认的首页
   if (menu.path === activeMenu.path) {
-    const prePage = index - 1 > 0 ? menuList.value[index - 1] : {path: defaultMenu.path};
+    const prePage = index - 1 > 0 ? tabInfo.value[index - 1] : {path: defaultMenu.path};
     router.push({path: prePage.path, query: prePage.query || {}});
   }
 }
