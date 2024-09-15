@@ -1,4 +1,3 @@
-import {reactive} from "vue";
 import {createRouter, createWebHashHistory} from "vue-router";
 import {useUserStore} from "@/stores/user.js";
 import {useKeepAliveStore} from "@/stores/keepAlive.js";
@@ -9,9 +8,9 @@ import Service from "./modules/service";
 
 NProgress.configure({showSpinner: false});
 
-let modules = reactive([
+let modules = [
     ...System, ...Service
-]);
+];
 
 const router = createRouter({
     history: createWebHashHistory(),
