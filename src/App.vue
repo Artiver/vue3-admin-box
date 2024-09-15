@@ -5,8 +5,8 @@
 </template>
 
 <script setup lang="js">
-import {useAppStore} from "@/stores/app.js"
-const appStore = useAppStore()
+import {useAppStore} from "@/stores/app.js";
+const appStore = useAppStore();
 </script>
 
 <style lang="scss">

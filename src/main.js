@@ -6,21 +6,18 @@ import "./theme/modules/chinese/index.scss"; // 主题css
 import "@imengyu/vue3-context-menu/lib/vue3-context-menu.css"; // 右键菜单
 import App from "./App.vue";
 import router from "./router";
-import {getAuthRoutes} from "./router/permission";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import {createPinia} from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
-const pinia = createPinia()
-pinia.use(piniaPluginPersistedstate)
+const pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
 
-getAuthRoutes().then(() => {
-  const app = createApp(App)
-  // 注册所有图标
-  for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-    app.component(key, component)
-  }
-  app.use(pinia)
-  app.use(router)
-  app.mount("#app")
-})
+const app = createApp(App);
+// 注册所有图标
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component);
+}
+app.use(pinia);
+app.use(router);
+app.mount("#app");
