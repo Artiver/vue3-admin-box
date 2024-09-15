@@ -22,13 +22,13 @@ export const useAppStore = defineStore("app", {
     getters: {},
     actions: {
         isCollapseChange(option) {
-            this.isCollapse = option
+            this.isCollapse = option;
         },
         setState(option) {
-            this.other[option.store] = option.value
+            this.other[option.store] = option.value;
         },
         setTheme(option) {
-            this.theme = option
+            this.theme = option;
         },
     },
     persist: {

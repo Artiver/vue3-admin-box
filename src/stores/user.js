@@ -15,8 +15,8 @@ export const useUserStore = defineStore("user", {
                 // }).catch(err => {
                 //     reject(err)
                 // })
-                this.token = "admin"
-                resolve(true)
+                this.token = "admin";
+                resolve(true);
             })
         },
         logOut() {
@@ -28,10 +28,10 @@ export const useUserStore = defineStore("user", {
             //     localStorage.removeItem("keepAlive")
             //     location.reload()
             // })
-            localStorage.removeItem("user")
-            localStorage.removeItem("tabs")
-            localStorage.removeItem("keepAlive")
-            location.reload()
+            localStorage.removeItem("user");
+            localStorage.removeItem("tabs");
+            localStorage.removeItem("keepAlive");
+            location.reload();
         }
     },
     persist: {

@@ -81,7 +81,7 @@ const pathResolve = computed(() => {
   }
   path = props.basePath ? props.basePath + "/" + path : path;
   return path;
-})
+});
 </script>
 
 <style scoped lang="scss">

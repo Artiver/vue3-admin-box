@@ -1,7 +1,7 @@
 <template>
   <div class="logo-container">
     <el-space :size="10">
-      <img src="@/assets/logo.png" alt="">
+      <img src="@/assets/logo.png" alt="logo">
       <h1 v-if="!appStore.isCollapse">{{ systemTitle }}</h1>
     </el-space>
   </div>

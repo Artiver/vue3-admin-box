@@ -78,25 +78,25 @@ const themeColorArr = [
 ];
 
 function setTheme() {
-  const userTheme = style[state.style]
-  const body = document.getElementsByTagName("body")[0]
-  body.setAttribute("data-theme", state.style)
-  body.style.setProperty("--system-primary-color", state.primaryColor)
+  const userTheme = style[state.style];
+  const body = document.getElementsByTagName("body")[0];
+  body.setAttribute("data-theme", state.style);
+  body.style.setProperty("--system-primary-color", state.primaryColor);
   for (let i in userTheme) {
     if (i === "name") {
       continue;
     }
-    const item = userTheme[i]
+    const item = userTheme[i];
     for (let y in item) {
-      let cssVarName = "--system-" + i + "-" + y.replace(/([A-Z])/g, "-$1").toLowerCase()
-      body.style.setProperty(cssVarName, item[y])
+      let cssVarName = "--system-" + i + "-" + y.replace(/([A-Z])/g, "-$1").toLowerCase();
+      body.style.setProperty(cssVarName, item[y]);
     }
   }
-  appStore.setTheme({state: {...state}})
+  appStore.setTheme({state: {...state}});
 }
 
 watch(state, () => {
-  setTheme()
+  setTheme();
 });
 
 let drawer = ref(false);

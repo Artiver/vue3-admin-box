@@ -92,7 +92,7 @@ onMounted(() => {
   initialGraph();
   registerEvents();
   registerAddons();
-})
+});
 </script>
 
 <style scoped lang="scss">

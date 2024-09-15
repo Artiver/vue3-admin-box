@@ -34,27 +34,27 @@ import TabsBar from "./Tabs/TabsBar.vue";
 import {useAppStore} from "@/stores/app.js";
 import {useKeepAliveStore} from "@/stores/keepAlive.js";
 
-const appStore = useAppStore()
-const keepAliveStore = useKeepAliveStore()
+const appStore = useAppStore();
+const keepAliveStore = useKeepAliveStore();
 
 function hideMenu() {
-  appStore.isCollapseChange(true)
+  appStore.isCollapseChange(true);
 }
 
 function resizeHandler() {
   if (document.body.clientWidth <= 1000 && !appStore.isCollapse) {
-    appStore.isCollapseChange(true)
+    appStore.isCollapseChange(true);
   } else if (document.body.clientWidth > 1000 && appStore.isCollapse) {
-    appStore.isCollapseChange(false)
+    appStore.isCollapseChange(false);
   }
 }
 
-resizeHandler()
+resizeHandler();
 
 // 监听页面变化
 onBeforeMount(() => {
-  useEventListener("resize", resizeHandler)
-})
+  useEventListener("resize", resizeHandler);
+});
 </script>
 
 <style scoped lang="scss">

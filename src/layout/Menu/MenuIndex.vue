@@ -32,7 +32,7 @@ const activeMenu = computed(() => {
     return meta.activeMenu;
   }
   return path;
-})
+});
 </script>
 
 <style scoped lang="scss">

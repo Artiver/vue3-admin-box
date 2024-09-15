@@ -36,12 +36,12 @@ function handleLink(item) {
   router.push(path);
 }
 
-getBreadcrumb();
-
 watch(
     () => route.path,
     () => getBreadcrumb()
 )
+
+getBreadcrumb();
 </script>
 
 <style scoped lang="scss">

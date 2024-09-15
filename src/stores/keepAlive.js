@@ -7,12 +7,12 @@ export const useKeepAliveStore = defineStore("keepAlive", {
     getters: {},
     actions: {
         addKeepAliveComponentsName(name) {
-            this.keepAliveComponentsName.push(name)
+            this.keepAliveComponentsName.push(name);
         },
         delKeepAliveComponentsName(name) {
-            const key = this.keepAliveComponentsName.indexOf(name)
+            const key = this.keepAliveComponentsName.indexOf(name);
             if (key !== -1) {
-                this.keepAliveComponentsName.splice(key, 1)
+                this.keepAliveComponentsName.splice(key, 1);
             }
         }
     },
