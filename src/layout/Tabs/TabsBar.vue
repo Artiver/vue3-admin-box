@@ -3,8 +3,6 @@
     <el-scrollbar
         class="scroll-container tags-view-container"
         ref="scrollbarDom"
-        @wheel.passive="handleWheelScroll"
-        @scroll="handleScroll"
     >
       <Item
           v-for="menu in tabInfo"
@@ -40,7 +38,7 @@
 </template>
 
 <script setup lang="js">
-import {nextTick, reactive, ref} from "vue";
+import {reactive, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
 import {ArrowDown, CircleClose, Refresh} from "@element-plus/icons-vue";
@@ -54,7 +52,6 @@ const route = useRoute();
 const router = useRouter();
 
 const scrollbarDom = ref(null);
-const scrollLeft = ref(0);
 const defaultMenu = {
   path: "/dashboard",
   meta: {title: "首页", hideClose: true}
@@ -153,52 +150,6 @@ function delMenu(menu, nextPath) {
 // 初始化activeMenu
 function initMenu(menu) {
   activeMenu = menu;
-  nextTick(() => {
-    setPosition();
-  })
-}
-
-/** 设置当前滚动条应该在的位置 */
-function setPosition() {
-  if (scrollbarDom.value) {
-    const domBox = {
-      scrollbar: scrollbarDom.value.wrapRef,
-      activeDom: scrollbarDom.value.wrapRef.querySelector(".active"),
-      activeFather: scrollbarDom.value.wrapRef.querySelector(".el-scrollbar__view")
-    };
-    let hasDomElements = true;
-    Object.keys(domBox).forEach((dom) => {
-      if (!dom) {
-        hasDomElements = false;
-      }
-    });
-    if (!hasDomElements) {
-      return;
-    }
-    const domData = {
-      scrollbar: domBox.scrollbar.getBoundingClientRect(),
-      activeDom: domBox.activeDom.getBoundingClientRect(),
-      activeFather: domBox.activeFather.getBoundingClientRect()
-    };
-    domBox.scrollbar.scrollLeft = domData.activeDom.x - domData.activeFather.x + 1 / 2 * domData.activeDom.width - 1 / 2 * domData.scrollbar.width;
-  }
-}
-
-/** 监听鼠标滚动事件 */
-function handleWheelScroll(e) {
-  let distance = 0;
-  let speed = 5;
-  if (e.wheelDelta > 30) {
-    distance = -10;
-  } else if (e.wheelDelta < -30) {
-    distance = 10;
-  }
-  scrollbarDom.value?.setScrollLeft(scrollLeft.value + distance * speed);
-}
-
-/** 监听滚动事件 */
-function handleScroll({scrollLeft: left}) {
-  scrollLeft.value = left;
 }
 
 // 初始化时调用：1. 新增菜单 2. 初始化activeMenu
