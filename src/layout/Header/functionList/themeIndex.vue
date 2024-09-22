@@ -71,10 +71,11 @@ const state = reactive({
 const themeColorArr = [
   {color: "#409eff", textColor: "#fff", tip: "默认蓝"},
   {color: "#d60f20", textColor: "#fff", tip: "玫瑰红"},
-  {color: "#ac25e6", textColor: "#fff", tip: "优雅紫"},
-  {color: "#4dc86f", textColor: "#fff", tip: "故事绿"},
-  {color: "#13c2c2", textColor: "#fff", tip: "明青"},
-  {color: "#333", textColor: "#fff", tip: "极客黑"}
+  {color: "#e69966", textColor: "#fff", tip: "杏黄橙"},
+  {color: "#9932cc", textColor: "#fff", tip: "暗蓝紫"},
+  {color: "#4dc86f", textColor: "#fff", tip: "苹果绿"},
+  {color: "#13c2c2", textColor: "#fff", tip: "蓝绿青"},
+  {color: "#333333", textColor: "#fff", tip: "极客黑"}
 ];
 
 function setTheme() {
