@@ -17,7 +17,7 @@ import {Graph} from "@antv/x6";
 import {Stencil} from "@antv/x6-plugin-stencil";
 
 import ContextMenu from "@imengyu/vue3-context-menu";
-import x6Data from "./X6EditorData";
+import x6Data from "./X6EditorData.js";
 
 let graph = null;
 
