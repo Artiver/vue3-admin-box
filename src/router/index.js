@@ -1,3 +1,4 @@
+import {storeToRefs} from "pinia";
 import {createRouter, createWebHashHistory} from "vue-router";
 import {useTabStore} from "@/stores/tab.js";
 import {useUserStore} from "@/stores/user.js";
@@ -43,8 +44,9 @@ router.beforeEach((to, _from, next) => {
 
 // 路由跳转后的监听操作
 router.afterEach((to, _from) => {
-    const tabs = useTabStore();
-    tabs.activeRoute = to;
+    const tabStore = useTabStore();
+    const {activeRoute} = storeToRefs(tabStore);
+    activeRoute.value = to;
     const keepAliveComponents = useKeepAliveStore();
     const keepAliveComponentsName = keepAliveComponents.keepAliveComponentsName;
     const fullPath = to.fullPath;

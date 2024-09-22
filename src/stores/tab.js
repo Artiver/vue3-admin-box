@@ -11,9 +11,7 @@ export const useTabStore = defineStore("tabs", {
             this.tabInfo.push(tab);
         },
         hasTabInfo(path) {
-            return this.tabInfo.some((obj) => {
-                return obj.path === path;
-            })
+            return this.tabInfo.some((obj) => obj.path === path);
         },
         removeTabInfo(path) {
             const tabIndex = this.tabInfo.findIndex((obj) => obj.path === path);

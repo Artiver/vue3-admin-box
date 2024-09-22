@@ -110,12 +110,12 @@ function addMenu(tab) {
 
 // 删除菜单项
 function delMenu(tab) {
-  let index = tabInfo.value.findIndex((item) => item.path === tab.path);
   if (!tab.meta.hideClose) {
     closeListRoute(tab);
   }
   // 若删除的是当前页面，回到前一页，若为最后一页，则回到默认的首页
   if (tab.path === activeRoute.value.path) {
+    const index = tabInfo.value.findIndex((item) => item.path === tab.path);
     const prePage = index - 1 > 0 ? tabInfo.value[index - 1] : {path: defaultRoute.path};
     router.push({path: prePage.path, query: prePage.query || {}});
   }
