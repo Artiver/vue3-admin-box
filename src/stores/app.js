@@ -6,8 +6,8 @@ export const useAppStore = defineStore("app", {
         elementSize: "small", // element默认尺寸，支持官网large / default / small小参数
         theme: {
             state: {
-                style: "default",
-                primaryColor: "#409eff",
+                style: "chinese",
+                primaryColor: "#e69966",
                 primaryTextColor: "#000000",
                 menuType: "side"
             }
