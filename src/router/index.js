@@ -2,10 +2,10 @@ import {createRouter, createWebHashHistory} from "vue-router";
 import {useTabStore} from "@/stores/tab.js";
 import {useUserStore} from "@/stores/user.js";
 import {useKeepAliveStore} from "@/stores/keepAlive.js";
-import NProgress from "@/utils/system/nprogress";
-import {changeTitle} from "@/utils/system/title";
-import System from "./modules/system";
-import Service from "./modules/service";
+import NProgress from "@/utils/system/nprogress.js";
+import {changeTitle} from "@/utils/system/title.js";
+import System from "./modules/system.js";
+import Service from "./modules/service.js";
 
 NProgress.configure({showSpinner: false});
 
@@ -31,7 +31,7 @@ router.beforeEach((to, _from, next) => {
             next("/");
             return;
         }
-        next()
+        next();
     } else if (whiteList.includes(to.path)) {
         to.meta.title ? (changeTitle(to.meta.title)) : ""; // 动态title
         next();

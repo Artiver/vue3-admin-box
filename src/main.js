@@ -5,7 +5,7 @@ import "./assets/style/common.scss"; // 公共css
 import "./theme/modules/chinese/index.scss"; // 主题css
 import "@imengyu/vue3-context-menu/lib/vue3-context-menu.css"; // 右键菜单
 import App from "./App.vue";
-import router from "./router";
+import router from "./router/index.js";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import {createPinia} from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";

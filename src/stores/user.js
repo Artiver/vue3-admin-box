@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {login, logout} from "@/api/user.js";
+import {login, logout} from "@/api/user";
 
 export const useUserStore = defineStore("user", {
     state: () => ({
@@ -17,7 +17,7 @@ export const useUserStore = defineStore("user", {
                 // })
                 this.token = "admin";
                 resolve(true);
-            })
+            });
         },
         logOut() {
             // logout().then(res => {

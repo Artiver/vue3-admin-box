@@ -58,7 +58,7 @@ import {reactive, ref} from "vue";
 import {useRouter} from "vue-router";
 import elMessage from "@/utils/system/element-ui-wrap.js";
 import loginLeftPng from "@/assets/login/left.jpg";
-import {systemSubTitle, systemTitle, WelcomeDescription} from "@/config";
+import {systemSubTitle, systemTitle, WelcomeDescription} from "@/config/index.js";
 import {Key, User, View as ViewEye} from "@element-plus/icons-vue";
 import {useUserStore} from "@/stores/user.js";
 

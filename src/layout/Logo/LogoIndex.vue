@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="js">
-import {systemTitle} from "@/config";
+import {systemTitle} from "@/config/index.js";
 import {useAppStore} from "@/stores/app.js";
 
 const appStore = useAppStore();

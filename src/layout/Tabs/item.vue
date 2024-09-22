@@ -5,16 +5,18 @@
     </router-link>
     <el-space :size="3">
       <el-icon @click.stop="reload" v-if="active">
-        <refresh-right/>
+        <RefreshRight/>
       </el-icon>
       <el-icon @click.stop="closeTab" v-if="!props.menu.meta.hideClose" alt="del">
-        <close/>
+        <Close/>
       </el-icon>
     </el-space>
   </div>
 </template>
 
 <script setup lang="js">
+import {RefreshRight, Close} from "@element-plus/icons-vue";
+
 const props = defineProps({
   menu: {
     type: Object,

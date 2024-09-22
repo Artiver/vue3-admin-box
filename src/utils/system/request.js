@@ -50,4 +50,4 @@ function showError(error) {
     }
 }
 
-export default service;
+export default service

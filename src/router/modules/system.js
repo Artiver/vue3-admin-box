@@ -1,5 +1,5 @@
 import Layout from "@/layout/TabsIndex.vue";
-import {createNameComponent} from "../createNode";
+import {createNameComponent} from "../createNode.js";
 
 const route = [
   {

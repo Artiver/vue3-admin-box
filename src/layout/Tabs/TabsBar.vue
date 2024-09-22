@@ -42,6 +42,7 @@ import {useTemplateRef} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
 import Item from "./item.vue";
+import {ArrowDown, Refresh, CircleClose} from "@element-plus/icons-vue";
 import {useKeepAliveStore} from "@/stores/keepAlive.js";
 import {useTabStore} from "@/stores/tab.js";
 
