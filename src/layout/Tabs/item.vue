@@ -15,8 +15,6 @@
 </template>
 
 <script setup lang="js">
-import {Close, RefreshRight} from "@element-plus/icons-vue";
-
 const props = defineProps({
   menu: {
     type: Object,
@@ -34,7 +32,7 @@ const props = defineProps({
     type: Boolean,
     default: false
   }
-})
+});
 
 const emit = defineEmits(["close", "reload"]);
 
