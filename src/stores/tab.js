@@ -2,6 +2,7 @@ import {defineStore} from "pinia";
 
 export const useTabStore = defineStore("tabs", {
     state: () => ({
+        activeRoute: null,
         tabInfo: []
     }),
     getters: {},
@@ -9,8 +10,16 @@ export const useTabStore = defineStore("tabs", {
         addTabInfo(tab) {
             this.tabInfo.push(tab);
         },
-        removeTabInfo(tabIndex) {
-            this.tabInfo.splice(tabIndex, 1);
+        hasTabInfo(path) {
+            return this.tabInfo.some((obj) => {
+                return obj.path === path;
+            })
+        },
+        removeTabInfo(path) {
+            const tabIndex = this.tabInfo.findIndex((obj) => obj.path === path);
+            if (tabIndex > -1) {
+                this.tabInfo.splice(tabIndex, 1);
+            }
         }
     },
     persist: {

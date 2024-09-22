@@ -8,7 +8,7 @@
           v-for="menu in tabInfo"
           :key="menu.meta.title"
           :menu="menu"
-          :active="activeMenu.path === menu.path"
+          :active="activeRoute.path === menu.path"
           @close="delMenu(menu)"
           @reload="pageReload"
       />
@@ -38,10 +38,9 @@
 </template>
 
 <script setup lang="js">
-import {reactive, ref} from "vue";
+import {useTemplateRef} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
-import {ArrowDown, CircleClose, Refresh} from "@element-plus/icons-vue";
 import Item from "./item.vue";
 import {useKeepAliveStore} from "@/stores/keepAlive.js";
 import {useTabStore} from "@/stores/tab.js";
@@ -51,26 +50,20 @@ const keepAliveStore = useKeepAliveStore();
 const route = useRoute();
 const router = useRouter();
 
-const scrollbarDom = ref(null);
-const defaultMenu = {
+const scrollbarDom = useTemplateRef('scrollbarDom');
+const defaultRoute = {
   path: "/dashboard",
   meta: {title: "首页", hideClose: true}
 };
 
-let activeMenu = reactive({path: ""});
-const {tabInfo} = storeToRefs(tabStore);
+const {activeRoute, tabInfo} = storeToRefs(tabStore);
 if (tabInfo.value.length === 0) {
-  addMenu(defaultMenu);
+  addMenu(defaultRoute);
 }
 
 router.afterEach(() => {
   addMenu(route);
-  initMenu(route);
 });
-
-function getComponentName(menu) {
-  return menu.matched?.slice(-1)[0].components.default.name;
-}
 
 // 当前页面组件重新加载
 function pageReload() {
@@ -78,83 +71,57 @@ function pageReload() {
   self.handleReload();
 }
 
-function closeListRoute(tag) {
-  if (tag.meta.cache && tag.name) {
-    keepAliveStore.delKeepAliveComponentsName(tag.name);
+function closeListRoute(tab) {
+  if (tab.meta.cache) {
+    keepAliveStore.delKeepAliveComponentsName(tab.path);
   }
-  const index = tabInfo.value.findIndex((item) => item.path === tag.path);
-  tabStore.removeTabInfo(index);
+  tabStore.removeTabInfo(tab.path);
 }
 
 // 关闭除了当前标签之外的所有标签
 function closeOtherRoute() {
-  const items = [...tabStore.tabInfo];
-  for (let tag of items) {
-    if (!tag.meta.hideClose && tag.path !== activeMenu.path) {
-      closeListRoute(tag);
+  const items = [...tabInfo.value];
+  for (let tab of items) {
+    if (!tab.meta.hideClose && tab.path !== activeRoute.value.path) {
+      closeListRoute(tab);
     }
   }
 }
 
 // 关闭所有的标签，除了首页
 function closeAllRoute() {
-  router.push(defaultMenu.path);
-  const items = [...tabStore.tabInfo];
-  for (let tag of items) {
-    if (!tag.meta.hideClose) {
-      closeListRoute(tag);
+  router.push(defaultRoute.path);
+  const items = [...tabInfo.value];
+  for (let tab of items) {
+    if (!tab.meta.hideClose) {
+      closeListRoute(tab);
     }
   }
 }
 
-// 添加新的菜单项
-function addMenu(menu) {
-  let {path, meta, query} = menu;
-  let name = getComponentName(menu);
-  if (meta.hideTabs) {
-    return;
-  }
-  let hasMenu = tabInfo.value.some((obj) => {
-    return obj.path === path;
-  });
-  if (!hasMenu) {
-    tabStore.addTabInfo({
-      path,
-      meta,
-      name,
-      query
-    });
+// 添加菜单项
+function addMenu(tab) {
+  let {path, meta, query} = tab;
+  if (!tabStore.hasTabInfo(path)) {
+    tabStore.addTabInfo({ path, meta, query });
   }
 }
 
 // 删除菜单项
-function delMenu(menu, nextPath) {
-  let index = tabInfo.value.findIndex((item) => item.path === menu.path);
-  if (nextPath) {
-    router.push(nextPath);
-    return;
-  }
-  if (!menu.meta.hideClose) {
-    if (menu.meta.cache && menu.name) {
-      keepAliveStore.delKeepAliveComponentsName(menu.name);
-    }
-    tabStore.removeTabInfo(index);
+function delMenu(tab) {
+  let index = tabInfo.value.findIndex((item) => item.path === tab.path);
+  if (!tab.meta.hideClose) {
+    closeListRoute(tab);
   }
   // 若删除的是当前页面，回到前一页，若为最后一页，则回到默认的首页
-  if (menu.path === activeMenu.path) {
-    const prePage = index - 1 > 0 ? tabInfo.value[index - 1] : {path: defaultMenu.path};
+  if (tab.path === activeRoute.value.path) {
+    const prePage = index - 1 > 0 ? tabInfo.value[index - 1] : {path: defaultRoute.path};
     router.push({path: prePage.path, query: prePage.query || {}});
   }
 }
 
-// 初始化activeMenu
-function initMenu(menu) {
-  activeMenu = menu;
-}
-
-// 初始化时调用：1. 新增菜单 2. 初始化activeMenu
+// 初始化时调用：1. 新增菜单
 addMenu(route);
-initMenu(route);
 </script>
 
 <style scoped lang="scss">

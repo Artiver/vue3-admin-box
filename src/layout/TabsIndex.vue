@@ -13,10 +13,10 @@
       <el-main>
         <router-view v-slot="{ Component, route }">
           <transition :name="route.meta.transition || 'fade-transform'" mode="out-in">
-            <keep-alive  v-if="keepAliveStore.keepAliveComponentsName" :include="keepAliveStore.keepAliveComponentsName">
-              <component :is="Component" :key="route.fullPath"/>
+            <keep-alive v-if="keepAliveStore.keepAliveComponentsName" :include="keepAliveStore.keepAliveComponentsName">
+              <component :is="componentWrap(Component, route.fullPath)" :key="route.fullPath"/>
             </keep-alive>
-            <component v-else :is="Component" :key="route.fullPath"/>
+            <component v-else :is="componentWrap(Component, route.fullPath)" :key="route.fullPath"/>
           </transition>
         </router-view>
       </el-main>
@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="js">
-import {onBeforeMount} from "vue";
+import {defineComponent, h, onBeforeMount} from "vue";
 import {useEventListener} from "@vueuse/core";
 import MenuIndex from "./Menu/MenuIndex.vue";
 import LogoIndex from "./Logo/LogoIndex.vue";
@@ -36,7 +36,7 @@ import {useKeepAliveStore} from "@/stores/keepAlive.js";
 
 const appStore = useAppStore();
 const keepAliveStore = useKeepAliveStore();
-
+const pages = new Map();
 function hideMenu() {
   appStore.isCollapseChange(true);
 }
@@ -47,6 +47,28 @@ function resizeHandler() {
   } else if (document.body.clientWidth > 1000 && appStore.isCollapse) {
     appStore.isCollapseChange(false);
   }
+}
+
+function componentWrap(component, key) {
+  if (!component) {
+    return component;
+  }
+  const componentName = component.type.name;
+  if (pages.has(key)) {
+    return pages.get(key);
+  }
+  if (key !== componentName) {
+    // 将组件名称改为fullPath，确保同组件能够渲染不同的标签页，缓存不受影响
+    const com = h(defineComponent({
+      name: key,
+      render() {
+        return h(component)
+      }
+    }));
+    pages.set(key, com);
+    return com;
+  }
+  return component;
 }
 
 resizeHandler();

@@ -1,5 +1,5 @@
 import Layout from "@/layout/TabsIndex.vue";
-import {createNameComponent} from "../createNode";
+import {createNameComponent} from "../createNode.js";
 
 const route = [
   {
@@ -40,6 +40,26 @@ const route = [
         path: "x6editor",
         component: createNameComponent(() => import("@/views/main/editor/topology/X6EditorIndex.vue")),
         meta: {title: "X6Editor", icon: "Notebook", cache: true, hideClose: false}
+      },
+    ]
+  },
+  {
+    path: "/article",
+    component: Layout,
+    redirect: "/dashboard",
+    meta: {title: "列表", icon: "Notebook"},
+    children: [
+      {
+        path: "list",
+        component: createNameComponent(() => import("@/views/main/article/list.vue")),
+        meta: {title: "Article", icon: "Notebook", cache: true, hideClose: false}
+      },
+      {
+        path: "detail/:id",
+        component: createNameComponent(() => import("@/views/main/article/detail.vue")),
+        hideMenu: true,
+        meta: {title: "Detail", icon: "Notebook", cache: true, hideClose: false},
+        props: true
       },
     ]
   }

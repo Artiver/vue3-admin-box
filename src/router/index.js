@@ -1,4 +1,5 @@
 import {createRouter, createWebHashHistory} from "vue-router";
+import {useTabStore} from "@/stores/tab.js";
 import {useUserStore} from "@/stores/user.js";
 import {useKeepAliveStore} from "@/stores/keepAlive.js";
 import NProgress from "@/utils/system/nprogress";
@@ -42,11 +43,13 @@ router.beforeEach((to, _from, next) => {
 
 // 路由跳转后的监听操作
 router.afterEach((to, _from) => {
+    const tabs = useTabStore();
+    tabs.activeRoute = to;
     const keepAliveComponents = useKeepAliveStore();
-    const keepAliveComponentsName = keepAliveComponents.keepAliveComponentsName || [];
-    const name = to.matched[to.matched.length - 1].components.default.name;
-    if (to.meta && to.meta.cache && name && !keepAliveComponentsName.includes(name)) {
-        keepAliveComponents.addKeepAliveComponentsName(name);
+    const keepAliveComponentsName = keepAliveComponents.keepAliveComponentsName;
+    const fullPath = to.fullPath;
+    if (to.meta && to.meta.cache && fullPath && !keepAliveComponentsName.includes(fullPath)) {
+        keepAliveComponents.addKeepAliveComponentsName(fullPath);
     }
     NProgress.done();
 });
