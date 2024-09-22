@@ -8,7 +8,7 @@
           v-for="menu in tabInfo"
           :key="menu.meta.title"
           :menu="menu"
-          :active="activeRoute.path === menu.path"
+          :active="activeMenu.path === menu.path"
           @close="delMenu(menu)"
           @reload="pageReload"
       />
@@ -38,11 +38,11 @@
 </template>
 
 <script setup lang="js">
-import {useTemplateRef} from "vue";
+import {reactive, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
+import {ArrowDown, CircleClose, Refresh} from "@element-plus/icons-vue";
 import Item from "./item.vue";
-import {ArrowDown, Refresh, CircleClose} from "@element-plus/icons-vue";
 import {useKeepAliveStore} from "@/stores/keepAlive.js";
 import {useTabStore} from "@/stores/tab.js";
 
@@ -51,19 +51,21 @@ const keepAliveStore = useKeepAliveStore();
 const route = useRoute();
 const router = useRouter();
 
-const scrollbarDom = useTemplateRef('scrollbarDom');
-const defaultRoute = {
+const scrollbarDom = ref(null);
+const defaultMenu = {
   path: "/dashboard",
   meta: {title: "首页", hideClose: true}
 };
 
-const {activeRoute, tabInfo} = storeToRefs(tabStore);
+let activeMenu = reactive({path: ""});
+const {tabInfo} = storeToRefs(tabStore);
 if (tabInfo.value.length === 0) {
-  addMenu(defaultRoute);
+  addMenu(defaultMenu);
 }
 
 router.afterEach(() => {
   addMenu(route);
+  initMenu(route);
 });
 
 // 当前页面组件重新加载
@@ -72,57 +74,69 @@ function pageReload() {
   self.handleReload();
 }
 
-function closeListRoute(tab) {
-  if (tab.meta.cache) {
-    keepAliveStore.delKeepAliveComponentsName(tab.path);
+// 关闭一个标签页
+function closeListRoute(tag) {
+  if (!tag.meta.hideClose) {
+    if (tag.meta.cache) {
+      keepAliveStore.delKeepAliveComponentsName(tag.path);
+    }
+    tabStore.removeTabInfo(tag.path);
   }
-  tabStore.removeTabInfo(tab.path);
 }
 
 // 关闭除了当前标签之外的所有标签
 function closeOtherRoute() {
-  const items = [...tabInfo.value];
-  for (let tab of items) {
-    if (!tab.meta.hideClose && tab.path !== activeRoute.value.path) {
-      closeListRoute(tab);
+  const items = [...tabStore.tabInfo];
+  for (let tag of items) {
+    if (tag.path !== activeMenu.path) {
+      closeListRoute(tag);
     }
   }
 }
 
 // 关闭所有的标签，除了首页
 function closeAllRoute() {
-  router.push(defaultRoute.path);
-  const items = [...tabInfo.value];
-  for (let tab of items) {
-    if (!tab.meta.hideClose) {
-      closeListRoute(tab);
-    }
+  router.push(defaultMenu.path);
+  const items = [...tabStore.tabInfo];
+  for (let tag of items) {
+    closeListRoute(tag);
   }
 }
 
-// 添加菜单项
-function addMenu(tab) {
-  let {path, meta, query} = tab;
+// 添加新的菜单项
+function addMenu(menu) {
+  let {path, meta, query} = menu;
+  if (meta.hideTabs) {
+    return;
+  }
   if (!tabStore.hasTabInfo(path)) {
-    tabStore.addTabInfo({ path, meta, query });
+    tabStore.addTabInfo({path, meta, query});
   }
 }
 
 // 删除菜单项
-function delMenu(tab) {
-  if (!tab.meta.hideClose) {
-    closeListRoute(tab);
+function delMenu(menu, nextPath) {
+  let index = tabInfo.value.findIndex((item) => item.path === menu.path);
+  if (nextPath) {
+    router.push(nextPath);
+    return;
   }
+  closeListRoute(menu);
   // 若删除的是当前页面，回到前一页，若为最后一页，则回到默认的首页
-  if (tab.path === activeRoute.value.path) {
-    const index = tabInfo.value.findIndex((item) => item.path === tab.path);
-    const prePage = index - 1 > 0 ? tabInfo.value[index - 1] : {path: defaultRoute.path};
+  if (menu.path === activeMenu.path) {
+    const prePage = index - 1 > 0 ? tabInfo.value[index - 1] : {path: defaultMenu.path};
     router.push({path: prePage.path, query: prePage.query || {}});
   }
 }
 
-// 初始化时调用：1. 新增菜单
+// 初始化activeMenu
+function initMenu(menu) {
+  activeMenu = menu;
+}
+
+// 初始化时调用：1. 新增菜单 2. 初始化activeMenu
 addMenu(route);
+initMenu(route);
 </script>
 
 <style scoped lang="scss">
