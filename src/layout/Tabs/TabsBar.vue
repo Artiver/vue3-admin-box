@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="js">
-import {reactive, ref} from "vue";
+import {reactive, useTemplateRef} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
 import {ArrowDown, CircleClose, Refresh} from "@element-plus/icons-vue";
@@ -51,13 +51,13 @@ const keepAliveStore = useKeepAliveStore();
 const route = useRoute();
 const router = useRouter();
 
-const scrollbarDom = ref(null);
+const scrollbarDom = useTemplateRef("scrollbarDom");
 const defaultMenu = {
   path: "/dashboard",
   meta: {title: "首页", hideClose: true}
 };
 
-let activeMenu = reactive({path: ""});
+const activeMenu = reactive({path: ""});
 const {tabInfo} = storeToRefs(tabStore);
 if (tabInfo.value.length === 0) {
   addMenu(defaultMenu);
@@ -86,7 +86,7 @@ function closeListRoute(tag) {
 
 // 关闭除了当前标签之外的所有标签
 function closeOtherRoute() {
-  const items = [...tabStore.tabInfo];
+  const items = [...tabInfo.value];
   for (let tag of items) {
     if (tag.path !== activeMenu.path) {
       closeListRoute(tag);
@@ -97,7 +97,7 @@ function closeOtherRoute() {
 // 关闭所有的标签，除了首页
 function closeAllRoute() {
   router.push(defaultMenu.path);
-  const items = [...tabStore.tabInfo];
+  const items = [...tabInfo.value];
   for (let tag of items) {
     closeListRoute(tag);
   }
@@ -115,23 +115,16 @@ function addMenu(menu) {
 }
 
 // 删除菜单项
-function delMenu(menu, nextPath) {
-  let index = tabInfo.value.findIndex((item) => item.path === menu.path);
-  if (nextPath) {
-    router.push(nextPath);
-    return;
+function delMenu(menu) {
+  if (menu.path === activeMenu.path) {
+    router.back();
   }
   closeListRoute(menu);
-  // 若删除的是当前页面，回到前一页，若为最后一页，则回到默认的首页
-  if (menu.path === activeMenu.path) {
-    const prePage = index - 1 > 0 ? tabInfo.value[index - 1] : {path: defaultMenu.path};
-    router.push({path: prePage.path, query: prePage.query || {}});
-  }
 }
 
 // 初始化activeMenu
 function initMenu(menu) {
-  activeMenu = menu;
+  activeMenu.path = menu.path;
 }
 
 // 初始化时调用：1. 新增菜单 2. 初始化activeMenu
