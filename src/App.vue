@@ -1,11 +1,13 @@
 <template>
-  <el-config-provider :size="appStore.elementSize">
+  <el-config-provider :size="appStore.elementSize" :locale="zhCn">
     <router-view></router-view>
   </el-config-provider>
 </template>
 
 <script setup lang="js">
 import {useAppStore} from "@/stores/app.js";
+import zhCn from "element-plus/dist/locale/zh-cn.mjs";
+
 const appStore = useAppStore();
 </script>
 
