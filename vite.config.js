@@ -71,6 +71,11 @@ export default defineConfig(({command, mode}) => {
       }),
     ],
     css: {
+      preprocessorOptions: {
+        scss: {
+          api: "modern"
+        }
+      },
       postcss: {
         plugins: [
           {
