@@ -1,18 +1,9 @@
 import {defineConfig} from "vite";
 import vue from "@vitejs/plugin-vue";
-import {vitePluginSvg} from "@webxrd/vite-plugin-svg";
 import {resolve} from "path";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import {ElementPlusResolver} from "unplugin-vue-components/resolvers";
-
-const pathResolve = (dir) => {
-  return resolve(__dirname, ".", dir);
-};
-
-const alias = {
-  "@": pathResolve("src")
-};
 
 /**
  * @description-cn vite官网
@@ -21,7 +12,9 @@ export default defineConfig(({command, mode}) => {
   return {
     base: "./",
     resolve: {
-      alias
+      alias: {
+        "@": resolve(__dirname, ".", "src")
+      }
     },
     server: {
       port: 3001,
@@ -60,15 +53,6 @@ export default defineConfig(({command, mode}) => {
       // Icons({
       //     autoInstall: true,
       // }),
-      vitePluginSvg({
-        // 必要的 必须是绝对路径组成的数组
-        iconDirs: [
-          resolve(__dirname, "src/assets/svg"),
-        ],
-        // 必要的 入口script
-        main: resolve(__dirname, "src/main.js"),
-        symbolIdFormat: "icon-[name]"
-      }),
     ],
     css: {
       preprocessorOptions: {
