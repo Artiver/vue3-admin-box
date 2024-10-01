@@ -117,7 +117,9 @@ function addMenu(menu) {
 // 删除菜单项
 function delMenu(menu) {
   if (menu.path === activeMenu.path) {
-    router.back();
+    const index = tabInfo.value.findIndex((item) => item.path === menu.path);
+    const prePage = index - 1 > 0 ? tabInfo.value[index - 1] : {path: defaultMenu.path};
+    router.push({path: prePage.path, query: prePage.query || {}});
   }
   closeListRoute(menu);
 }
