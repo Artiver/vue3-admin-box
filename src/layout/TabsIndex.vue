@@ -11,7 +11,13 @@
       </el-header>
       <TabsBar v-show="appStore.other.showTabs"/>
       <el-main>
-        <router-view v-slot="{ Component, route }">
+        <component
+            v-for="(item) in state.iframeComList"
+            :is="item[1]"
+            v-show="isIframe && item[0] === route.fullPath"
+            :key="item[0]"
+        />
+        <router-view v-if="!isIframe" v-slot="{ Component, route }">
           <transition :name="route.meta.transition || 'fade-transform'" mode="out-in">
             <keep-alive v-if="keepAliveStore.keepAliveComponentsName" :include="keepAliveStore.keepAliveComponentsName">
               <component :is="componentWrap(Component, route.fullPath)" :key="route.fullPath"/>
@@ -25,7 +31,8 @@
 </template>
 
 <script setup lang="js">
-import {defineComponent, h, onBeforeMount} from "vue";
+import {defineComponent, h, ref, reactive, watch, nextTick, onBeforeMount} from "vue";
+import {useRoute} from "vue-router";
 import {useEventListener} from "@vueuse/core";
 import MenuIndex from "./Menu/MenuIndex.vue";
 import LogoIndex from "./Logo/LogoIndex.vue";
@@ -33,13 +40,38 @@ import HeaderIndex from "./Header/HeaderIndex.vue";
 import TabsBar from "./Tabs/TabsBar.vue";
 import {useAppStore} from "@/stores/app.js";
 import {useKeepAliveStore} from "@/stores/keepAlive.js";
+import IframePage from "@/views/main/iframe/index.vue";
 
+const route = useRoute();
 const appStore = useAppStore();
 const keepAliveStore = useKeepAliveStore();
 const pages = new Map();
+const iframePages = new Map();
+const isIframe = ref(false);
+const state = reactive({
+  iframeComList: [],
+});
+
 function hideMenu() {
   appStore.isCollapseChange(true);
 }
+
+watch(
+  () => route,
+  (newValue) => {
+    isIframe.value = newValue.meta.iframe;
+    if (isIframe.value) {
+      iframeWrap(IframePage, newValue.fullPath);
+      nextTick(() => {
+        state.iframeComList = [...iframePages];
+      });
+    }
+  },
+  {
+    deep: true,
+    immediate: true,
+  },
+);
 
 function resizeHandler() {
   if (document.body.clientWidth <= 1000 && !appStore.isCollapse) {
@@ -69,6 +101,22 @@ function componentWrap(component, key) {
     return com;
   }
   return component;
+}
+
+function iframeWrap(component, key) {
+  let wrapper;
+  if (iframePages.has(key)) {
+    wrapper = iframePages.get(key);
+  } else {
+    wrapper = h(defineComponent({
+      name: key,
+      render() {
+        return h(component);
+      },
+    }));
+    iframePages.set(key, wrapper);
+  }
+  return wrapper;
 }
 
 resizeHandler();

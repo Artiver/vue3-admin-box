@@ -62,6 +62,24 @@ const route = [
         props: true
       },
     ]
+  },
+  {
+    path: "/iframe",
+    component: Layout,
+    redirect: "/dashboard",
+    meta: {title: "嵌套页面", icon: "Notebook"},
+    children: [
+      {
+        path: "page1",
+        component: createNameComponent(() => import("@/views/main/iframe/page1.vue")),
+        meta: {title: "Page1", icon: "Notebook", cache: true, iframe: true, hideClose: false}
+      },
+      {
+        path: "page2",
+        component: createNameComponent(() => import("@/views/main/iframe/page2.vue")),
+        meta: {title: "Page2", icon: "Notebook", cache: true, iframe: true, hideClose: false}
+      }
+    ]
   }
 ]
 
