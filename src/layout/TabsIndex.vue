@@ -41,17 +41,16 @@ import HeaderIndex from "./Header/HeaderIndex.vue";
 import TabsBar from "./Tabs/TabsBar.vue";
 import {useAppStore} from "@/stores/app.js";
 import {useKeepAliveStore} from "@/stores/keepAlive.js";
-import {useIframeStore} from "@/stores/iframe.js";
+import {usePagesStore} from "@/stores/pages.js";
 import Page1 from "@/views/main/iframe/page1.vue";
 
 const route = useRoute();
 const appStore = useAppStore();
 const keepAliveStore = useKeepAliveStore();
-const iframeStore = useIframeStore();
+const pagesStore = usePagesStore();
 
-const pages = new Map();
 const isIframe = ref(false);
-const {iframePages} = storeToRefs(iframeStore);
+const {iframePages} = storeToRefs(pagesStore);
 
 function hideMenu() {
   appStore.isCollapseChange(true);
@@ -84,25 +83,26 @@ function componentWrap(component, key) {
     return component;
   }
   const componentName = component.type.name;
-  if (pages.has(key)) {
-    return pages.get(key);
+  const pages = pagesStore.getKeepAlivePages(key);
+  if (pages) {
+    return pages;
   }
   if (key !== componentName) {
     // 将组件名称改为fullPath，确保同组件能够渲染不同的标签页，缓存不受影响
-    const com = h(defineComponent({
+    const wrapper = h(defineComponent({
       name: key,
       render() {
         return h(component)
       }
     }));
-    pages.set(key, com);
-    return com;
+    pagesStore.setKeepAlivePages(key, wrapper);
+    return wrapper;
   }
   return component;
 }
 
 function iframeWrap(component, key) {
-  let wrapper = iframeStore.getIframePages(key);
+  let wrapper = pagesStore.getIframePages(key);
   if (!wrapper) {
     wrapper = h(defineComponent({
       name: key,
@@ -110,7 +110,7 @@ function iframeWrap(component, key) {
         return h(component);
       },
     }));
-    iframeStore.setIframePages(key, wrapper);
+    pagesStore.setIframePages(key, wrapper);
   }
   return wrapper;
 }
