@@ -13,6 +13,9 @@ export const usePagesStore = defineStore("pages", {
         setIframePages(key, value) {
             this.iframePages[key] = value;
         },
+        delIframePages(key) {
+            delete this.iframePages[key];
+        },
         getKeepAlivePages(key) {
             return this.keepAlivePages[key];
         },

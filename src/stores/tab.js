@@ -1,4 +1,5 @@
 import {defineStore} from "pinia";
+import {usePagesStore} from "./pages.js";
 
 export const useTabStore = defineStore("tabs", {
     state: () => ({
@@ -16,6 +17,8 @@ export const useTabStore = defineStore("tabs", {
             const tabIndex = this.tabInfo.findIndex((obj) => obj.path === path);
             if (tabIndex > -1) {
                 this.tabInfo.splice(tabIndex, 1);
+                const pagesStore = usePagesStore();
+                pagesStore.delIframePages(path);
             }
         }
     },
