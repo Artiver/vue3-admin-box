@@ -12,12 +12,12 @@
       <TabsBar v-show="appStore.other.showTabs"/>
       <el-main>
         <component
-            v-for="(item) in state.iframeComList"
-            :is="item[1]"
-            v-show="isIframe && item[0] === route.fullPath"
-            :key="item[0]"
+            v-for="(value, key) in iframePages"
+            :is="value"
+            v-show="isIframe && key === route.fullPath"
+            :key="key"
         />
-        <router-view v-if="!isIframe" v-slot="{ Component, route }">
+        <router-view v-show="!isIframe" v-slot="{ Component, route }">
           <transition :name="route.meta.transition || 'fade-transform'" mode="out-in">
             <keep-alive v-if="keepAliveStore.keepAliveComponentsName" :include="keepAliveStore.keepAliveComponentsName">
               <component :is="componentWrap(Component, route.fullPath)" :key="route.fullPath"/>
@@ -31,8 +31,9 @@
 </template>
 
 <script setup lang="js">
-import {defineComponent, h, ref, reactive, watch, nextTick, onBeforeMount} from "vue";
+import {defineComponent, h, ref, watch, onBeforeMount} from "vue";
 import {useRoute} from "vue-router";
+import {storeToRefs} from "pinia";
 import {useEventListener} from "@vueuse/core";
 import MenuIndex from "./Menu/MenuIndex.vue";
 import LogoIndex from "./Logo/LogoIndex.vue";
@@ -40,17 +41,17 @@ import HeaderIndex from "./Header/HeaderIndex.vue";
 import TabsBar from "./Tabs/TabsBar.vue";
 import {useAppStore} from "@/stores/app.js";
 import {useKeepAliveStore} from "@/stores/keepAlive.js";
-import IframePage from "@/views/main/iframe/index.vue";
+import {useIframeStore} from "@/stores/iframe.js";
+import Page1 from "@/views/main/iframe/page1.vue";
 
 const route = useRoute();
 const appStore = useAppStore();
 const keepAliveStore = useKeepAliveStore();
+const iframeStore = useIframeStore();
+
 const pages = new Map();
-const iframePages = new Map();
 const isIframe = ref(false);
-const state = reactive({
-  iframeComList: [],
-});
+const {iframePages} = storeToRefs(iframeStore);
 
 function hideMenu() {
   appStore.isCollapseChange(true);
@@ -61,10 +62,7 @@ watch(
   (newValue) => {
     isIframe.value = newValue.meta.iframe;
     if (isIframe.value) {
-      iframeWrap(IframePage, newValue.fullPath);
-      nextTick(() => {
-        state.iframeComList = [...iframePages];
-      });
+      iframeWrap(Page1, newValue.fullPath);
     }
   },
   {
@@ -104,17 +102,15 @@ function componentWrap(component, key) {
 }
 
 function iframeWrap(component, key) {
-  let wrapper;
-  if (iframePages.has(key)) {
-    wrapper = iframePages.get(key);
-  } else {
+  let wrapper = iframeStore.getIframePages(key);
+  if (!wrapper) {
     wrapper = h(defineComponent({
       name: key,
       render() {
         return h(component);
       },
     }));
-    iframePages.set(key, wrapper);
+    iframeStore.setIframePages(key, wrapper);
   }
   return wrapper;
 }
