@@ -1,16 +1,23 @@
 <template>
-  <iframe class="iframe_style" :src="url"></iframe>
+  <div class="div_style">
+    <p>page1</p>
+    <iframe class="iframe_style" :src="url"></iframe>
+  </div>
 </template>
 
 <script setup lang="js">
 
-const url = "http://127.0.0.1:3001";
+const url = document.location.protocol + "//" + document.location.host;
 
 </script>
 
 <style scoped lang="scss">
-.iframe_style {
+.div_style {
   width: 100%;
   height: 99%;
+}
+.iframe_style {
+  width: 100%;
+  height: 95%;
 }
 </style>

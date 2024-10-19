@@ -32,7 +32,7 @@
 
 <script setup lang="js">
 import {defineComponent, h, ref, watch, onBeforeMount} from "vue";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
 import {useEventListener} from "@vueuse/core";
 import MenuIndex from "./Menu/MenuIndex.vue";
@@ -42,9 +42,9 @@ import TabsBar from "./Tabs/TabsBar.vue";
 import {useAppStore} from "@/stores/app.js";
 import {useKeepAliveStore} from "@/stores/keepAlive.js";
 import {usePagesStore} from "@/stores/pages.js";
-import Page1 from "@/views/main/iframe/page1.vue";
 
 const route = useRoute();
+const router = useRouter();
 const appStore = useAppStore();
 const keepAliveStore = useKeepAliveStore();
 const pagesStore = usePagesStore();
@@ -57,11 +57,13 @@ function hideMenu() {
 }
 
 watch(
-  () => route,
+  () => route.meta.iframe,
   (newValue) => {
-    isIframe.value = newValue.meta.iframe;
+    isIframe.value = newValue;
     if (isIframe.value) {
-      iframeWrap(Page1, newValue.fullPath);
+      // 路由是懒加载的，需要通过resolve渲染取得；这里会被渲染两次，体现为请求两次URL
+      const tempMatched = router.resolve({path: route.fullPath}).matched;
+      iframeWrap(tempMatched[tempMatched.length - 1].components.default, route.fullPath);
     }
   },
   {
