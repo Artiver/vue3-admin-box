@@ -17,12 +17,12 @@
             v-show="isIframe && key === route.fullPath"
             :key="key"
         />
-        <router-view v-show="!isIframe" v-slot="{ Component, route }">
-          <transition :name="route.meta.transition || 'fade-transform'" mode="out-in">
+        <router-view v-slot="{ Component, route }">
+          <transition name="fade-transform" mode="out-in">
             <keep-alive v-if="keepAliveStore.keepAliveComponentsName" :include="keepAliveStore.keepAliveComponentsName">
-              <component :is="componentWrap(Component, route.fullPath)" :key="route.fullPath"/>
+              <component v-if="!isIframe" :is="componentWrap(Component, route.fullPath)" :key="route.fullPath"/>
             </keep-alive>
-            <component v-else :is="componentWrap(Component, route.fullPath)" :key="route.fullPath"/>
+            <component v-else-if="!isIframe" :is="componentWrap(Component, route.fullPath)" :key="route.fullPath"/>
           </transition>
         </router-view>
       </el-main>
@@ -61,7 +61,7 @@ watch(
   (newValue) => {
     isIframe.value = newValue;
     if (isIframe.value) {
-      // 路由是懒加载的，需要通过resolve渲染取得；这里会被渲染两次，体现为请求两次URL
+      // 路由是懒加载的，需要通过resolve渲染取得
       const tempMatched = router.resolve({path: route.fullPath}).matched;
       iframeWrap(tempMatched[tempMatched.length - 1].components.default, route.fullPath);
     }
