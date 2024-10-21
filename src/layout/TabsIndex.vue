@@ -61,9 +61,7 @@ watch(
   (newValue) => {
     isIframe.value = newValue;
     if (isIframe.value) {
-      // 路由是懒加载的，需要通过resolve渲染取得
-      const tempMatched = router.resolve({path: route.fullPath}).matched;
-      iframeWrap(tempMatched[tempMatched.length - 1].components.default, route.fullPath);
+      iframeWrap(route.fullPath);
     }
   },
   {
@@ -103,18 +101,20 @@ function componentWrap(component, key) {
   return component;
 }
 
-function iframeWrap(component, key) {
-  let wrapper = pagesStore.getIframePages(key);
-  if (!wrapper) {
-    wrapper = h(defineComponent({
-      name: key,
-      render() {
-        return h(component);
-      },
-    }));
-    pagesStore.setIframePages(key, wrapper);
+function iframeWrap(key) {
+  if (pagesStore.getIframePages(key)) {
+    return;
   }
-  return wrapper;
+  // 路由是懒加载的，需要通过resolve渲染取得
+  const tempMatched = router.resolve({path: key}).matched;
+  const component = tempMatched[tempMatched.length - 1].components.default;
+  const wrapper = h(defineComponent({
+    name: key,
+    render() {
+      return h(component);
+    },
+  }));
+  pagesStore.setIframePages(key, wrapper);
 }
 
 resizeHandler();
