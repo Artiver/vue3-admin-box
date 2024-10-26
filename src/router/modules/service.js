@@ -70,14 +70,16 @@ const route = [
     meta: {title: "嵌套页面", icon: "Notebook"},
     children: [
       {
-        path: "page1",
-        component: createNameComponent(() => import("@/views/main/iframe/page1.vue")),
-        meta: {title: "Page1", icon: "Notebook", cache: true, iframe: true, hideClose: false}
+        path: "page",
+        component: createNameComponent(() => import("@/views/main/iframe/index.vue")),
+        meta: {title: "Iframe", icon: "Notebook", cache: true, hideClose: false},
       },
       {
-        path: "page2",
-        component: createNameComponent(() => import("@/views/main/iframe/page2.vue")),
-        meta: {title: "Page2", icon: "Notebook", cache: true, iframe: true, hideClose: false}
+        path: "page/:id",
+        component: createNameComponent(() => import("@/views/main/iframe/page.vue")),
+        meta: {title: "Page", icon: "Notebook", cache: true, iframe: true, hideClose: false},
+        hideMenu: true,
+        props: true
       }
     ]
   }
