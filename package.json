@@ -23,7 +23,7 @@
     "normalize.css": "^8.0.1",
     "nprogress": "^0.2.0",
     "pinia": "^2.2.4",
-    "pinia-plugin-persistedstate": "^4.1.1",
+    "pinia-plugin-persistedstate": "^4.1.2",
     "vditor": "^3.10.7",
     "vue": "^3.5.12",
     "vue-router": "^4.4.5"
@@ -31,11 +31,11 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.1.4",
     "eslint": "^9.13.0",
-    "eslint-plugin-vue": "^9.29.0",
+    "eslint-plugin-vue": "^9.29.1",
     "globals": "^15.11.0",
-    "sass": "^1.80.3",
+    "sass": "^1.80.4",
     "unplugin-auto-import": "^0.18.3",
     "unplugin-vue-components": "^0.27.4",
-    "vite": "^5.4.9"
+    "vite": "^5.4.10"
   }
 }
