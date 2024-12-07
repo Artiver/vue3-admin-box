@@ -44,9 +44,9 @@ router.beforeEach((to, _from, next) => {
 router.afterEach((to, _from) => {
     const keepAliveComponents = useKeepAliveStore();
     const keepAliveComponentsName = keepAliveComponents.keepAliveComponentsName;
-    const fullPath = to.fullPath;
-    if (to.meta && to.meta.cache && fullPath && !keepAliveComponentsName.includes(fullPath)) {
-        keepAliveComponents.addKeepAliveComponentsName(fullPath);
+    const name = to.path;
+    if (to.meta && to.meta.cache && name && !keepAliveComponentsName.includes(name)) {
+        keepAliveComponents.addKeepAliveComponentsName(name);
     }
     NProgress.done();
 });

@@ -14,15 +14,15 @@
         <component
             v-for="(value, key) in iframePages"
             :is="value"
-            v-show="isIframe && key === route.fullPath"
+            v-show="isIframe && key === route.path"
             :key="key"
         />
         <router-view v-slot="{ Component, route }">
           <transition name="fade-transform" mode="out-in">
             <keep-alive v-if="keepAliveStore.keepAliveComponentsName" :include="keepAliveStore.keepAliveComponentsName">
-              <component v-if="!isIframe" :is="componentWrap(Component, route.fullPath)" :key="route.fullPath"/>
+              <component v-if="!isIframe" :is="componentWrap(Component, route.path)" :key="route.path"/>
             </keep-alive>
-            <component v-else-if="!isIframe" :is="componentWrap(Component, route.fullPath)" :key="route.fullPath"/>
+            <component v-else-if="!isIframe" :is="componentWrap(Component, route.path)" :key="route.path"/>
           </transition>
         </router-view>
       </el-main>
@@ -61,7 +61,7 @@ watch(
   (newValue) => {
     isIframe.value = newValue;
     if (isIframe.value) {
-      iframeWrap(route.fullPath);
+      iframeWrap(route.path);
     }
   },
   {
@@ -88,7 +88,7 @@ function componentWrap(component, key) {
     return pages;
   }
   if (key !== componentName) {
-    // 将组件名称改为fullPath，确保同组件能够渲染不同的标签页，缓存不受影响
+    // 将组件名称改为path，确保同组件能够渲染不同的标签页，缓存不受影响
     const wrapper = h(defineComponent({
       name: key,
       render() {
