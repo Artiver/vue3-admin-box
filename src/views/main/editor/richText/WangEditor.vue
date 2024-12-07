@@ -44,7 +44,6 @@ onBeforeUnmount(() => {
 }
 
 .editor-style {
-  height: 91vh;
   overflow-y: hidden;
 }
 </style>

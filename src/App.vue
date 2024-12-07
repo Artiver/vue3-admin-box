@@ -17,9 +17,4 @@ const appStore = useAppStore();
 body {
   font-family: "LXGW WenKai Screen", "Microsoft YaHei", serif;
 }
-
-.app-container {
-  width: 100%;
-  height: 100%;
-}
 </style>

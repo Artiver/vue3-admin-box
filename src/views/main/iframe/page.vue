@@ -20,10 +20,8 @@ const url = document.location.protocol + "//" + "127.0.0.1:7899";
 <style scoped lang="scss">
 .div_style {
   width: 100%;
-  height: 99%;
 }
 .iframe_style {
   width: 100%;
-  height: 95%;
 }
 </style>

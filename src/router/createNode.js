@@ -26,9 +26,9 @@ export function createNameComponent(component) {
           },
           render: function () {
             if (this.isReload) {
-              return h("div", {class: "el-main-box"}, [h(reload)]);
+              return h("div", {class: ""}, [h(reload)]);
             } else {
-              return h("div", {class: "el-main-box"}, [createVNode(comm.default, this.$props)]);
+              return h("div", {class: ""}, [createVNode(comm.default, this.$props)]);
             }
           }
         });

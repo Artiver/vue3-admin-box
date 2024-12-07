@@ -149,12 +149,6 @@ onBeforeMount(() => {
   overflow-x: hidden;
 }
 
-:deep(.el-main-box) {
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-}
-
 @media screen and (max-width: 1000px) {
   .el-aside {
     position: fixed;
