@@ -1,7 +1,7 @@
 
 # 简介
 
-Vue 3 + Vite 5 + Pinia 2 + ElementPlus 2 + JavaScript
+Vue 3 + Vite + Pinia + ElementPlus + JavaScript
 
 一款简洁的后台管理系统，添加常用的组件，如markdown编辑器vditor、富文本编辑器wangEditor、图编辑器antv x6、代码编辑器monaco-editor等。
 
