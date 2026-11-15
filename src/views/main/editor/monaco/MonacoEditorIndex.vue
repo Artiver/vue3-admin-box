@@ -8,20 +8,9 @@
 <script setup lang="ts">
 import {onBeforeUnmount, onMounted, onActivated, ref} from "vue";
 import * as monaco from "monaco-editor";
-import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
-import EditorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
 import {ElNotification} from "element-plus";
 
 const text = ref("const a = 1;");
-
-self.MonacoEnvironment = {
-  getWorker(_id: string, label: string) {
-    if (["typescript", "javascript"].includes(label)) {
-      return new tsWorker();
-    }
-    return new EditorWorker();
-  },
-};
 
 let editor: monaco.editor.IStandaloneCodeEditor | null = null;
 
