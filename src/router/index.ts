@@ -22,7 +22,7 @@ const router = createRouter({
 const whiteList = ["/login"];
 
 // 路由跳转前的监听操作
-router.beforeEach((to, _from, next) => {
+router.beforeEach((to, _from) => {
     NProgress.start();
     const user = useUserStore();
     if (to.meta.title) {
@@ -30,14 +30,13 @@ router.beforeEach((to, _from, next) => {
     }
     if (user.token) {
         if (to.path === "/login") {
-            next("/");
-            return;
+            return "/";
         }
-        next();
+        return true;
     } else if (whiteList.includes(to.path)) {
-        next();
+        return true;
     } else {
-        next("/login"); // 全部重定向到登录页
+        return "/login"; // 全部重定向到登录页
     }
 });
 
