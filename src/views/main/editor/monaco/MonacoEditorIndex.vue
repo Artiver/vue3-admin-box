@@ -5,7 +5,7 @@
   </div>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {onBeforeUnmount, onMounted, onActivated, ref} from "vue";
 import * as monaco from "monaco-editor";
 import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
@@ -15,7 +15,7 @@ import {ElNotification} from "element-plus";
 const text = ref("const a = 1;");
 
 self.MonacoEnvironment = {
-  getWorker(id, label) {
+  getWorker(_id: string, label: string) {
     if (["typescript", "javascript"].includes(label)) {
       return new tsWorker();
     }
@@ -23,10 +23,10 @@ self.MonacoEnvironment = {
   },
 };
 
-let editor = null;
+let editor: monaco.editor.IStandaloneCodeEditor | null = null;
 
 function showContent() {
-  const content = editor.getValue();
+  const content = editor ? editor.getValue() : "";
   ElNotification({
     title: "Content",
     message: content,
@@ -35,7 +35,7 @@ function showContent() {
 }
 
 onMounted(() => {
-  editor = monaco.editor.create(document.getElementById("codeEditBox"), {
+  editor = monaco.editor.create(document.getElementById("codeEditBox") as HTMLElement, {
     theme: "vs",
     language: "javascript",
     value: text.value,
@@ -43,11 +43,11 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  editor.dispose();
+  editor?.dispose();
 });
 
 onActivated(() => {
-  editor.focus();
+  editor?.focus();
 });
 </script>
 

@@ -4,9 +4,9 @@
   </el-config-provider>
 </template>
 
-<script setup lang="js">
-import {useAppStore} from "@/stores/app.js";
-import zhCn from "element-plus/dist/locale/zh-cn.mjs";
+<script setup lang="ts">
+import {useAppStore} from "@/stores/app";
+import zhCn from "element-plus/es/locale/lang/zh-cn";
 
 const appStore = useAppStore();
 </script>

@@ -1,7 +1,7 @@
 
 # 简介
 
-Vue 3 + Vite + Pinia + ElementPlus + JavaScript
+Vue 3 + Vite + TypeScript + Pinia + ElementPlus
 
 一款简洁的后台管理系统，添加常用的组件，如markdown编辑器vditor、富文本编辑器wangEditor、图编辑器antv x6、代码编辑器monaco-editor等。
 
@@ -10,6 +10,17 @@ Vue 3 + Vite + Pinia + ElementPlus + JavaScript
 ```shell
 pnpm install
 pnpm run dev
+```
+
+# 脚本
+
+```shell
+pnpm run dev         # 启动开发服务
+pnpm run build       # 类型检查 + 生产构建
+pnpm run build:only  # 仅生产构建，跳过类型检查
+pnpm run type-check  # vue-tsc 类型检查
+pnpm run lint        # eslint 代码检查
+pnpm run serve       # 预览构建产物
 ```
 
 # 预览

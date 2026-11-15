@@ -16,15 +16,16 @@
   </el-scrollbar>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {computed} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import MenuItem from "./MenuItem.vue";
-import {useAppStore} from "@/stores/app.js";
+import {useAppStore} from "@/stores/app";
+import type {AppRouteRecordRaw} from "@/router/types";
 
 const appStore = useAppStore();
 const expandOneMenu = computed(() => appStore.other.expandOneMenu);
-const allRoutes = useRouter().options.routes;
+const allRoutes = useRouter().options.routes as unknown as AppRouteRecordRaw[];
 const route = useRoute();
 const activeMenu = computed(() => {
   const {meta, path} = route;

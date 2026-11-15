@@ -14,11 +14,12 @@
   </el-breadcrumb>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {ref, watch} from "vue";
 import {useRoute, useRouter} from "vue-router";
+import type {RouteLocationMatched} from "vue-router";
 
-const levelList = ref([]);
+const levelList = ref<RouteLocationMatched[]>([]);
 const route = useRoute();
 const router = useRouter();
 
@@ -27,7 +28,7 @@ function getBreadcrumb() {
   levelList.value = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false);
 }
 
-function handleLink(item) {
+function handleLink(item: RouteLocationMatched) {
   const {redirect, path} = item;
   if (redirect) {
     router.push(redirect.toString());

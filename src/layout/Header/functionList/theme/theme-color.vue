@@ -12,7 +12,7 @@
   </el-tooltip>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {Check} from "@element-plus/icons-vue";
 
 const props = defineProps({

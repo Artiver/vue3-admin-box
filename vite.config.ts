@@ -1,6 +1,6 @@
 import {defineConfig} from "vite";
 import vue from "@vitejs/plugin-vue";
-import {resolve} from "path";
+import {fileURLToPath, URL} from "node:url";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import {ElementPlusResolver} from "unplugin-vue-components/resolvers";
@@ -8,12 +8,12 @@ import {ElementPlusResolver} from "unplugin-vue-components/resolvers";
 /**
  * @description-cn vite官网
  * https://vitejs.cn/config/ */
-export default defineConfig(({command, mode}) => {
+export default defineConfig(() => {
   return {
     base: "./",
     resolve: {
       alias: {
-        "@": resolve(__dirname, ".", "src")
+        "@": fileURLToPath(new URL("./src", import.meta.url))
       }
     },
     server: {
@@ -56,16 +56,14 @@ export default defineConfig(({command, mode}) => {
     ],
     css: {
       preprocessorOptions: {
-        scss: {
-          api: "modern"
-        }
+        scss: {}
       },
       postcss: {
         plugins: [
           {
             postcssPlugin: "internal:charset-removal",
             AtRule: {
-              charset: (atRule) => {
+              charset: (atRule: { name: string; remove: () => void }) => {
                 if (atRule.name === "charset") {
                   atRule.remove();
                 }

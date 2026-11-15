@@ -4,10 +4,11 @@
   </div>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import Row from "./row.vue";
+import type {CardRowData} from "./types";
 
-const list = [
+const list: CardRowData[] = [
   {id: 1, name: "访问人数", data: "1", color: "#4e73df", icon: "Avatar"},
   {id: 2, name: "最新信息", data: "1", color: "#1cc88a", icon: "ChatLineSquare"},
   {id: 3, name: "库存数量", data: "1", color: "#36b9cc", icon: "Box"},

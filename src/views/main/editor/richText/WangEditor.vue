@@ -14,19 +14,20 @@
   </div>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {onBeforeUnmount, ref, shallowRef} from "vue";
 import "@wangeditor/editor/dist/css/style.css";
 import {Editor, Toolbar} from "@wangeditor/editor-for-vue";
+import type {IDomEditor, IEditorConfig, IToolbarConfig} from "@wangeditor/editor";
 
-const editorRef = shallowRef();
+const editorRef = shallowRef<IDomEditor>();
 const mode = ref("default");
 const valueHtml = ref("<h1>hello</h1>");
 
-const toolbarConfig = {};
-const editorConfig = {placeholder: "请输入内容..."};
+const toolbarConfig: Partial<IToolbarConfig> = {};
+const editorConfig: Partial<IEditorConfig> = {placeholder: "请输入内容..."};
 
-const handleCreated = (editor) => {
+const handleCreated = (editor: IDomEditor) => {
   editorRef.value = editor;
 };
 

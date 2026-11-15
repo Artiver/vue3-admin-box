@@ -1,7 +1,8 @@
 import Layout from "@/layout/TabsIndex.vue";
-import {createNameComponent} from "../createNode.js";
+import {createNameComponent} from "../createNode";
+import type {AppRouteRecordRaw} from "../types";
 
-const route = [
+const route: AppRouteRecordRaw[] = [
   {
     path: "/",
     component: Layout,

@@ -30,8 +30,9 @@
   </el-container>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {defineComponent, h, ref, watch, onBeforeMount} from "vue";
+import type {VNode} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
 import {useEventListener} from "@vueuse/core";
@@ -39,9 +40,9 @@ import MenuIndex from "./Menu/MenuIndex.vue";
 import LogoIndex from "./Logo/LogoIndex.vue";
 import HeaderIndex from "./Header/HeaderIndex.vue";
 import TabsBar from "./Tabs/TabsBar.vue";
-import {useAppStore} from "@/stores/app.js";
-import {useKeepAliveStore} from "@/stores/keepAlive.js";
-import {usePagesStore} from "@/stores/pages.js";
+import {useAppStore} from "@/stores/app";
+import {useKeepAliveStore} from "@/stores/keepAlive";
+import {usePagesStore} from "@/stores/pages";
 
 const route = useRoute();
 const router = useRouter();
@@ -59,7 +60,7 @@ function hideMenu() {
 watch(
   () => route.meta.iframe,
   (newValue) => {
-    isIframe.value = newValue;
+    isIframe.value = Boolean(newValue);
     if (isIframe.value) {
       iframeWrap(route.path);
     }
@@ -78,11 +79,11 @@ function resizeHandler() {
   }
 }
 
-function componentWrap(component, key) {
+function componentWrap(component: VNode | undefined, key: string) {
   if (!component) {
     return component;
   }
-  const componentName = component.type.name;
+  const componentName = (component.type as { name?: string } | null)?.name;
   const pages = pagesStore.getKeepAlivePages(key);
   if (pages) {
     return pages;
@@ -101,13 +102,16 @@ function componentWrap(component, key) {
   return component;
 }
 
-function iframeWrap(key) {
+function iframeWrap(key: string) {
   if (pagesStore.getIframePages(key)) {
     return;
   }
   // 路由是懒加载的，需要通过resolve渲染取得
   const tempMatched = router.resolve({path: key}).matched;
-  const component = tempMatched[tempMatched.length - 1].components.default;
+  const component = tempMatched[tempMatched.length - 1].components?.default;
+  if (!component) {
+    return;
+  }
   const wrapper = h(defineComponent({
     name: key,
     render() {

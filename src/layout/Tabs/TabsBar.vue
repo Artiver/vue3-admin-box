@@ -37,14 +37,16 @@
   </div>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {reactive, useTemplateRef} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
 import {ArrowDown, CircleClose, Refresh} from "@element-plus/icons-vue";
 import Item from "./item.vue";
-import {useKeepAliveStore} from "@/stores/keepAlive.js";
-import {useTabStore} from "@/stores/tab.js";
+import {useKeepAliveStore} from "@/stores/keepAlive";
+import {useTabStore} from "@/stores/tab";
+import type {TabInfo} from "@/stores/tab";
+import type {ReloadableComponent} from "@/router/createNode";
 
 const tabStore = useTabStore();
 const keepAliveStore = useKeepAliveStore();
@@ -52,7 +54,7 @@ const route = useRoute();
 const router = useRouter();
 
 const scrollbarDom = useTemplateRef("scrollbarDom");
-const defaultMenu = {
+const defaultMenu: TabInfo = {
   path: "/dashboard",
   meta: {title: "首页", hideClose: true}
 };
@@ -70,12 +72,13 @@ router.afterEach(() => {
 
 // 当前页面组件重新加载
 function pageReload() {
-  const self = route.matched[route.matched.length - 1].instances.default;
-  self.handleReload();
+  const matched = route.matched[route.matched.length - 1];
+  const self = matched.instances?.default as unknown as ReloadableComponent | null | undefined;
+  self?.handleReload();
 }
 
 // 关闭一个标签页
-function closeListRoute(tag) {
+function closeListRoute(tag: TabInfo) {
   if (!tag.meta.hideClose) {
     if (tag.meta.cache) {
       keepAliveStore.delKeepAliveComponentsName(tag.path);
@@ -104,7 +107,7 @@ function closeAllRoute() {
 }
 
 // 添加新的菜单项
-function addMenu(menu) {
+function addMenu(menu: TabInfo) {
   let {path, meta, query} = menu;
   if (meta.hideTabs) {
     return;
@@ -115,17 +118,17 @@ function addMenu(menu) {
 }
 
 // 删除菜单项
-function delMenu(menu) {
+function delMenu(menu: TabInfo) {
   if (menu.path === activeMenu.path) {
     const index = tabInfo.value.findIndex((item) => item.path === menu.path);
-    const prePage = index - 1 > 0 ? tabInfo.value[index - 1] : {path: defaultMenu.path};
+    const prePage: TabInfo = index - 1 > 0 ? tabInfo.value[index - 1] : {path: defaultMenu.path, meta: {}};
     router.push({path: prePage.path, query: prePage.query || {}});
   }
   closeListRoute(menu);
 }
 
 // 初始化activeMenu
-function initMenu(menu) {
+function initMenu(menu: TabInfo) {
   activeMenu.path = menu.path;
 }
 

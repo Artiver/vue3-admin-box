@@ -1,6 +1,11 @@
 import request from "@/utils/system/request";
 
-export function login(data) {
+export interface LoginParams {
+  username: string;
+  password: string;
+}
+
+export function login(data: LoginParams) {
   return request({
     url: "/user/login",
     method: "post",

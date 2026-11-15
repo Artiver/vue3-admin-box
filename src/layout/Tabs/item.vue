@@ -14,29 +14,30 @@
   </div>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {RefreshRight, Close} from "@element-plus/icons-vue";
+import type {TabInfo} from "@/stores/tab";
 
-const props = defineProps({
-  menu: {
-    type: Object,
-    default: () => {
-      return {
-        path: "",
-        meta: {
-          label: "",
-          hideClose: false
-        }
+const props = withDefaults(defineProps<{
+  menu?: TabInfo;
+  active?: boolean;
+}>(), {
+  menu: () => {
+    return {
+      path: "",
+      meta: {
+        label: "",
+        hideClose: false
       }
-    }
+    };
   },
-  active: {
-    type: Boolean,
-    default: false
-  }
+  active: false
 });
 
-const emit = defineEmits(["close", "reload"]);
+const emit = defineEmits<{
+  close: [];
+  reload: [];
+}>();
 
 function closeTab() {
   emit("close");

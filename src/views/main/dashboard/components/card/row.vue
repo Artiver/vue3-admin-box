@@ -12,13 +12,14 @@
   </div>
 </template>
 
-<script setup lang="js">
-const props = defineProps({
-  row: {
-    type: Object,
-    default: () => {
-      return {}
-    }
+<script setup lang="ts">
+import type {CardRowData} from "./types";
+
+const props = withDefaults(defineProps<{
+  row?: CardRowData;
+}>(), {
+  row: () => {
+    return {} as CardRowData;
   }
 });
 </script>

@@ -5,13 +5,13 @@
   </div>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {ref, onMounted} from "vue";
 import "animate.css";
 import Vditor from "vditor";
 import "vditor/dist/index.css";
 
-const vditor = ref();
+const vditor = ref<Vditor | null>(null);
 
 onMounted(() => {
   vditor.value = new Vditor("markdown-editor", {

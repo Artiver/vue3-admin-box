@@ -18,7 +18,7 @@
   </div>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {useRouter} from "vue-router";
 import four from "@/assets/images/404.png";
 import four_cloud from "@/assets/images/404_cloud.png";

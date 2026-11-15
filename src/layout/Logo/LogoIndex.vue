@@ -7,9 +7,9 @@
   </div>
 </template>
 
-<script setup lang="js">
-import {systemTitle} from "@/config/index.js";
-import {useAppStore} from "@/stores/app.js";
+<script setup lang="ts">
+import {systemTitle} from "@/config/index";
+import {useAppStore} from "@/stores/app";
 
 const appStore = useAppStore();
 </script>

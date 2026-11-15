@@ -3,12 +3,12 @@
   <el-button type="success" plain @click="toPage(2)">Page2</el-button>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {useRouter} from "vue-router";
 
 const router = useRouter();
 
-function toPage(id) {
+function toPage(id: number) {
   router.push({path: "/iframe/page/" + id});
 }
 </script>

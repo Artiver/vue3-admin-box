@@ -5,7 +5,7 @@
   </div>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {useRoute} from "vue-router";
 
 const route = useRoute();
@@ -13,7 +13,7 @@ const route = useRoute();
 // 使用iframe时需要用route取参数，而不是props
 const id = route.params.id;
 
-const url = document.location.protocol + "//" + "127.0.0.1:7899";
+const _url = document.location.protocol + "//" + "127.0.0.1:7899";
 
 </script>
 

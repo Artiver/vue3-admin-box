@@ -53,16 +53,14 @@
   </div>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {reactive, ref} from "vue";
-import {useRouter} from "vue-router";
-import elMessage from "@/utils/system/element-ui-wrap.js";
+import elMessage from "@/utils/system/element-ui-wrap";
 import loginLeftPng from "@/assets/login/left.jpg";
-import {systemSubTitle, systemTitle, WelcomeDescription} from "@/config/index.js";
+import {systemSubTitle, systemTitle, WelcomeDescription} from "@/config/index";
 import {Key, User, View as ViewEye} from "@element-plus/icons-vue";
-import {useUserStore} from "@/stores/user.js";
+import {useUserStore} from "@/stores/user";
 
-const router = useRouter();
 const userStore = useUserStore();
 const form = reactive({
   username: "",

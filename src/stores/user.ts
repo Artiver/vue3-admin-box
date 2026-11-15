@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import {login, logout} from "@/api/user.js";
+import type {LoginParams} from "@/api/user";
 
 export const useUserStore = defineStore("user", {
     state: () => ({
@@ -7,8 +7,8 @@ export const useUserStore = defineStore("user", {
     }),
     getters: {},
     actions: {
-        logIn(params) {
-            return new Promise((resolve, reject) => {
+        logIn(_params: LoginParams) {
+            return new Promise<boolean>((resolve) => {
                 // login(params).then(res => {
                 //     this.token = res.data.token
                 //     resolve(true)

@@ -11,26 +11,26 @@
   </div>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {h, onMounted} from "vue";
 import {Graph, Stencil} from "@antv/x6";
+import type {Cell} from "@antv/x6";
 
 import ContextMenu from "@imengyu/vue3-context-menu";
-import x6Data from "./X6EditorData.js";
+import x6Data from "./X6EditorData";
 
-let graph = null;
-
-function initialGraph() {
-  graph = new Graph({
-    container: document.getElementById("topology"),
+function initialGraph(): Graph {
+  const graph = new Graph({
+    container: document.getElementById("topology") as HTMLElement,
     background: {
       color: "#F2F7FA",
     },
   });
   graph.fromJSON(x6Data.drawData);
+  return graph;
 }
 
-function registerAddons() {
+function registerAddons(graph: Graph) {
   const stencil = new Stencil({
     target: graph,
     groups: [
@@ -54,12 +54,12 @@ function registerAddons() {
     height: 40,
   });
   const rect4 = rect3.clone();
-  document.getElementById("stencil").appendChild(stencil.container);
+  (document.getElementById("stencil") as HTMLElement).appendChild(stencil.container);
   stencil.load([rect1, rect2], "group1");
   stencil.load([rect3, rect4], "group2");
 }
 
-function handleNodeContextmenu(e, cell) {
+function handleNodeContextmenu(e: { pageX: number; pageY: number }, cell: Cell) {
   ContextMenu.showContextMenu({
     x: e.pageX,
     y: e.pageY,
@@ -81,16 +81,16 @@ function handleNodeContextmenu(e, cell) {
   });
 }
 
-function registerEvents() {
-  graph.on("node:contextmenu", ({e, x, y, cell, view}) => {
+function registerEvents(graph: Graph) {
+  graph.on("node:contextmenu", ({e, cell}) => {
     handleNodeContextmenu(e, cell);
   });
 }
 
 onMounted(() => {
-  initialGraph();
-  registerEvents();
-  registerAddons();
+  const graph = initialGraph();
+  registerEvents(graph);
+  registerAddons(graph);
 });
 </script>
 

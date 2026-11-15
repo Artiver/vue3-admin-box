@@ -4,9 +4,9 @@
   </component>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {ref} from "vue";
-import {useAppStore} from "@/stores/app.js";
+import {useAppStore} from "@/stores/app";
 
 const type = ref("router-link");
 const props = defineProps({
@@ -16,7 +16,7 @@ const props = defineProps({
   }
 });
 const appStore = useAppStore();
-const linkProps = (to) => {
+const linkProps = (to: string) => {
   return {
     to: to
   };

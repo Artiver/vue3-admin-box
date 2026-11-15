@@ -44,12 +44,12 @@
   </header>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import Breadcrumb from "./Breadcrumb.vue";
 import Theme from "./functionList/themeIndex.vue";
 import {ArrowDown, CircleCloseFilled, Expand, Fold} from "@element-plus/icons-vue";
-import {useAppStore} from "@/stores/app.js";
-import {useUserStore} from "@/stores/user.js";
+import {useAppStore} from "@/stores/app";
+import {useUserStore} from "@/stores/user";
 
 const appStore = useAppStore();
 const userStore = useUserStore();

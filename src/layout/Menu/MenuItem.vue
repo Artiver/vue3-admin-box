@@ -9,21 +9,21 @@
       </template>
       <menu-item v-for="(item, key) in menu.children" :key="key" :menu="item" :basePath="pathResolve"/>
     </el-sub-menu>
-    <appLink v-else-if="showMenuType === 1" :to="pathResolve">
-      <el-menu-item :index="pathResolve" v-if="!menu.children[0].children || menu.children[0].children.length === 0">
-        <el-icon v-if="menu.children[0].meta.icon || menu.meta.icon">
-          <component :is="menu.children[0].meta.icon || menu.meta.icon"/>
+    <appLink v-else-if="showMenuType === 1 && firstChild" :to="pathResolve">
+      <el-menu-item :index="pathResolve" v-if="!firstChild.children || firstChild.children.length === 0">
+        <el-icon v-if="firstChild.meta.icon || menu.meta.icon">
+          <component :is="firstChild.meta.icon || menu.meta.icon"/>
         </el-icon>
-        <template #title>{{ menu.children[0].meta.title }}</template>
+        <template #title>{{ firstChild.meta.title }}</template>
       </el-menu-item>
       <el-sub-menu v-else :index="pathResolve" :show-timeout="0" :hide-timeout="0">
         <template #title>
-          <el-icon v-if="menu.children[0].meta.icon || menu.meta.icon">
-            <component :is="menu.children[0].meta.icon || menu.meta.icon"/>
+          <el-icon v-if="firstChild.meta.icon || menu.meta.icon">
+            <component :is="firstChild.meta.icon || menu.meta.icon"/>
           </el-icon>
-          <span>{{ menu.children[0].meta.title }}</span>
+          <span>{{ firstChild.meta.title }}</span>
         </template>
-        <menu-item v-for="(item, key) in menu.children[0].children" :key="key" :menu="item" :basePath="pathResolve"/>
+        <menu-item v-for="(item, key) in firstChild.children" :key="key" :menu="item" :basePath="pathResolve"/>
       </el-sub-menu>
     </appLink>
     <appLink v-else :to="pathResolve">
@@ -37,22 +37,20 @@
   </template>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {computed} from "vue";
 import appLink from "./Link.vue";
+import type {AppRouteRecordRaw} from "@/router/types";
 
-const props = defineProps({
-  menu: {
-    type: Object,
-    required: true
-  },
-  basePath: {
-    type: String,
-    default: ""
-  }
+const props = withDefaults(defineProps<{
+  menu: AppRouteRecordRaw;
+  basePath?: string;
+}>(), {
+  basePath: ""
 });
 
 const menu = props.menu;
+const firstChild = computed(() => menu.children?.[0]);
 // todo: 优化if结构
 const showMenuType = computed(() => { // 0: 无子菜单， 1：有1个子菜单， 2：显示上下级子菜单
   if (menu.children && (menu.children.length > 1 || (menu.children.length === 1 && menu.alwayShow))) {
@@ -65,16 +63,17 @@ const showMenuType = computed(() => { // 0: 无子菜单， 1：有1个子菜单
 });
 // todo: 优化多层if
 const pathResolve = computed(() => {
-  let path;
+  let path: string;
   if (showMenuType.value === 1) {
-    if (menu.children[0].path.charAt(0) === "/") {
-      path = menu.children[0].path;
+    const children = menu.children as AppRouteRecordRaw[];
+    if (children[0].path.charAt(0) === "/") {
+      path = children[0].path;
     } else {
       let char = "/";
       if (menu.path.charAt(menu.path.length - 1) === "/") {
         char = "";
       }
-      path = menu.path + char + menu.children[0].path;
+      path = menu.path + char + children[0].path;
     }
   } else {
     path = menu.path;

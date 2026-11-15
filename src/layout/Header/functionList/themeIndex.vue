@@ -13,10 +13,11 @@
     <h3>整体风格设置</h3>
     <div class="theme-box">
       <theme-icon
-          v-model:active="state.style"
           v-for="(row, index) in style"
           :key="index"
           :name="index"
+          :active="state.style"
+          @update:active="changeStyle"
           :tip="row.name"
           :logo="row.logo.background"
           :menu="row.menu.background"
@@ -53,13 +54,15 @@
   </el-drawer>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {reactive, ref, watch} from "vue";
 import themeIcon from "./theme/theme-icon.vue";
 import themeColor from "./theme/theme-color.vue";
 import {style} from "@/theme/index";
+import type {ThemeStyleName} from "@/theme/index";
 import {Setting} from "@element-plus/icons-vue";
-import {useAppStore} from "@/stores/app.js";
+import {useAppStore} from "@/stores/app";
+import type {AppOtherOptions} from "@/stores/app";
 
 const appStore = useAppStore();
 const state = reactive({
@@ -78,19 +81,23 @@ const themeColorArr = [
   {color: "#333333", textColor: "#fff", tip: "极客黑"}
 ];
 
+function changeStyle(value: string) {
+  state.style = value as ThemeStyleName;
+}
+
 function setTheme() {
-  const userTheme = style[state.style];
+  const userTheme = style[state.style] as unknown as Record<string, Record<string, string> | string>;
   const body = document.getElementsByTagName("body")[0];
   body.setAttribute("data-theme", state.style);
   body.style.setProperty("--system-primary-color", state.primaryColor);
-  for (let i in userTheme) {
-    if (i === "name") {
+  for (const group in userTheme) {
+    if (group === "name") {
       continue;
     }
-    const item = userTheme[i];
-    for (let y in item) {
-      let cssVarName = "--system-" + i + "-" + y.replace(/([A-Z])/g, "-$1").toLowerCase();
-      body.style.setProperty(cssVarName, item[y]);
+    const item = userTheme[group] as Record<string, string>;
+    for (const key in item) {
+      const cssVarName = "--system-" + group + "-" + key.replace(/([A-Z])/g, "-$1").toLowerCase();
+      body.style.setProperty(cssVarName, item[key]);
     }
   }
   appStore.setTheme({state: {...state}});
@@ -101,18 +108,18 @@ watch(state, () => {
 });
 
 let drawer = ref(false);
-const options = reactive([
+const options = reactive<{ name: string; value: boolean; store: keyof AppOtherOptions }[]>([
   {name: "显示Logo", value: appStore.other.showLogo, store: "showLogo"},
   {name: "显示面包屑导航", value: appStore.other.showBreadCrumb, store: "showBreadCrumb"},
   {name: "显示标签页导航", value: appStore.other.showTabs, store: "showTabs"},
   {name: "保持一个菜单展开", value: appStore.other.expandOneMenu, store: "expandOneMenu"}
 ]);
 
-function drawerChange(value) {
+function drawerChange(value: boolean) {
   drawer.value = value;
 }
 
-function change(option) {
+function change(option: { name: string; value: boolean; store: keyof AppOtherOptions }) {
   appStore.setState({store: option.store, value: option.value});
 }
 

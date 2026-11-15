@@ -1,8 +1,19 @@
 import axios from "axios";
-import {useUserStore} from "@/stores/user.js";
-import elMessage from "@/utils/system/element-ui-wrap.js";
+import type {AxiosRequestConfig, AxiosResponse} from "axios";
+import {useUserStore} from "@/stores/user";
+import elMessage from "@/utils/system/element-ui-wrap";
 
 const baseURL = import.meta.env.VITE_BASE_URL;
+
+/**
+ * 后端统一返回结构
+ */
+export interface ApiResult<T = unknown> {
+    code: number;
+    msg?: string;
+    message?: string;
+    data: T;
+}
 
 const service = axios.create({
     baseURL: baseURL,
@@ -23,9 +34,10 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
     (response) => {
-        const res = response.data;
+        const res = response.data as ApiResult;
         if (res.code === 200) {
-            return res;
+            // 拦截器直接返回业务数据，故此处需要绕过 axios 的响应类型
+            return res as unknown as AxiosResponse;
         } else {
             showError(res);
             return Promise.reject(res);
@@ -40,7 +52,7 @@ service.interceptors.response.use(
 )
 
 // 错误处理
-function showError(error) {
+function showError(error: { code?: number; msg?: string; message?: string }) {
     // token过期，清除本地数据，并跳转至登录页面
     if (error.code === 403) {
         const user = useUserStore();
@@ -50,4 +62,11 @@ function showError(error) {
     }
 }
 
-export default service
+/**
+ * 统一请求方法，返回值即为后端返回的 ApiResult
+ */
+export function request<T = unknown>(config: AxiosRequestConfig): Promise<ApiResult<T>> {
+    return service.request<ApiResult<T>, ApiResult<T>>(config);
+}
+
+export default request

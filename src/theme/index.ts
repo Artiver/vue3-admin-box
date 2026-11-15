@@ -1,3 +1,46 @@
+export interface ThemeMenuStyle {
+  textColor: string;
+  background: string;
+  childrenBackground: string;
+  hoverBackground: string;
+  submenuActiveColor: string;
+}
+
+export interface ThemeLogoStyle {
+  color: string;
+  background: string;
+}
+
+export interface ThemeHeaderStyle {
+  background: string;
+  textColor: string;
+  itemHoverColor: string;
+  breadcrumbTextColor: string;
+  borderColor: string;
+  tabBackground: string;
+}
+
+export interface ThemeContainerStyle {
+  background: string;
+  mainBackground: string;
+}
+
+export interface ThemePageStyle {
+  background: string;
+  color: string;
+  tipColor: string;
+  borderColor: string;
+}
+
+export interface ThemeStyle {
+  name: string;
+  menu: ThemeMenuStyle;
+  logo: ThemeLogoStyle;
+  header: ThemeHeaderStyle;
+  container: ThemeContainerStyle;
+  page: ThemePageStyle;
+}
+
 export const style = {
   "default": {
     name: "默认菜单风格",
@@ -127,4 +170,9 @@ export const style = {
       borderColor: "#3e3e3e"
     }
   }
-}
+} satisfies Record<string, ThemeStyle>;
+
+/**
+ * 可用主题风格名称
+ */
+export type ThemeStyleName = keyof typeof style;

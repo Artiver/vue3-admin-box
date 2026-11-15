@@ -12,7 +12,7 @@
   </el-col>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -28,7 +28,7 @@ const tableData = [
   }
 ]
 
-function handleClick(id) {
+function handleClick(id: number | string) {
   router.push("/article/detail/" + id);
 }
 </script>

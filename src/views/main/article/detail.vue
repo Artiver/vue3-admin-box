@@ -10,12 +10,12 @@
   </el-col>
 </template>
 
-<script setup lang="js">
+<script setup lang="ts">
 import {ref} from "vue";
 
-const props = defineProps({
-  id: String,
-})
+defineProps<{
+  id?: string;
+}>()
 
 const textarea = ref("");
 </script>

@@ -1,20 +1,21 @@
 import {createRouter, createWebHashHistory} from "vue-router";
-import {useUserStore} from "@/stores/user.js";
-import {useKeepAliveStore} from "@/stores/keepAlive.js";
-import NProgress from "@/utils/system/nprogress.js";
-import {changeTitle} from "@/utils/system/title.js";
-import System from "./modules/system.js";
-import Service from "./modules/service.js";
+import type {RouteRecordRaw} from "vue-router";
+import {useUserStore} from "@/stores/user";
+import {useKeepAliveStore} from "@/stores/keepAlive";
+import NProgress from "@/utils/system/nprogress";
+import {changeTitle} from "@/utils/system/title";
+import System from "./modules/system";
+import Service from "./modules/service";
 
 NProgress.configure({showSpinner: false});
 
-let modules = [
+const modules = [
     ...System, ...Service
 ];
 
 const router = createRouter({
     history: createWebHashHistory(),
-    routes: modules
+    routes: modules as unknown as RouteRecordRaw[]
 });
 
 // 未授权时可访问的白名单
@@ -24,19 +25,19 @@ const whiteList = ["/login"];
 router.beforeEach((to, _from, next) => {
     NProgress.start();
     const user = useUserStore();
+    if (to.meta.title) {
+        changeTitle(to.meta.title); // 动态title
+    }
     if (user.token) {
-        to.meta.title ? (changeTitle(to.meta.title)) : ""; // 动态title
         if (to.path === "/login") {
             next("/");
             return;
         }
         next();
     } else if (whiteList.includes(to.path)) {
-        to.meta.title ? (changeTitle(to.meta.title)) : ""; // 动态title
         next();
     } else {
         next("/login"); // 全部重定向到登录页
-        to.meta.title ? (changeTitle(to.meta.title)) : ""; // 动态title
     }
 });
 
