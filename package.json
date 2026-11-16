@@ -2,6 +2,10 @@
   "name": "vue3-admin-box",
   "version": "2.0.2",
   "type": "module",
+  "packageManager": "pnpm@11.22.0",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build --mode=production",
@@ -12,7 +16,6 @@
   },
   "dependencies": {
     "@antv/x6": "^3.1.7",
-    "@antv/x6-vue-shape": "^3.0.2",
     "@element-plus/icons-vue": "^2.3.2",
     "@imengyu/vue3-context-menu": "^1.5.4",
     "@vueuse/core": "^15.0.0",
@@ -33,7 +36,7 @@
     "vue-router": "^5.0.4"
   },
   "devDependencies": {
-    "@types/node": "^26.6.6",
+    "@types/node": "^24.19.2",
     "@types/nprogress": "^0.2.3",
     "@vitejs/plugin-vue": "^6.0.5",
     "@vue/tsconfig": "^0.9.1",
@@ -42,7 +45,7 @@
     "globals": "^17.4.0",
     "jiti": "^2.7.0",
     "sass": "^1.98.0",
-    "typescript": "^7.0.2",
+    "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.2",
     "unplugin-auto-import": "^21.0.0",
     "unplugin-vue-components": "^32.1.0",
