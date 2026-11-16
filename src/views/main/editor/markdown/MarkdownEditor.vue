@@ -15,7 +15,7 @@ const vditor = ref<Vditor | null>(null);
 
 onMounted(() => {
   vditor.value = new Vditor("markdown-editor", {
-    cdn: "/static/markdown",
+    // cdn: "/static/markdown",
     cache: {enable: false},
   });
 });
